@@ -17,7 +17,6 @@ WORKDIR /rails
 
 # Set production environment
 ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development test"
 
@@ -25,10 +24,11 @@ ENV RAILS_ENV="production" \
 RUN gem install bundler
 
 # Copy gemfiles
-COPY Gemfile Gemfile.lock ./
+COPY Gemfile ./
 
 # Install gems
-RUN bundle install --jobs 4 --retry 3
+RUN bundle config set --local frozen false
+RUN bundle install --jobs 4 --retry 3 --verbose
 
 # Copy application code
 COPY . .
