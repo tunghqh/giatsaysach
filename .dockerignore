@@ -1,0 +1,40 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Logs
+log/*
+tmp/*
+
+# Dependencies
+node_modules
+vendor/bundle
+
+# Environment
+.env*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test files
+test/
+spec/
+coverage/
+
+# Development files
+Dockerfile*
+docker-compose*
+
+# Local development
+*.log
+*.pid
+*.seed
