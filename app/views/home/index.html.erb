@@ -1,0 +1,106 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <!-- Welcome Header -->
+      <div class="jumbotron bg-primary text-white rounded p-5 mb-4 shadow">
+        <div class="container-fluid py-2">
+          <h1 class="display-4">
+            <i class="fas fa-home me-3"></i>Chào mừng đến với Trang chủ!
+          </h1>
+          <p class="lead">Xin chào <strong><%= current_user.email %></strong>, bạn đã đăng nhập thành công.</p>
+          <hr class="my-4">
+          <p class="mb-0">Đây là trang chủ của ứng dụng sau khi đăng nhập.</p>
+        </div>
+      </div>
+
+      <!-- Dashboard Cards -->
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <div class="card border-primary shadow-sm">
+            <div class="card-body text-center">
+              <i class="fas fa-user fa-3x text-primary mb-3"></i>
+              <h5 class="card-title">Thông tin tài khoản</h5>
+              <p class="card-text">Email: <%= current_user.email %></p>
+              <p class="card-text">
+                <small class="text-muted">
+                  Tham gia ngày: <%= current_user.created_at.strftime("%d/%m/%Y") %>
+                </small>
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+          <div class="card border-success shadow-sm">
+            <div class="card-body text-center">
+              <i class="fas fa-clock fa-3x text-success mb-3"></i>
+              <h5 class="card-title">Thời gian hiện tại</h5>
+              <p class="card-text" id="current-time"></p>
+              <p class="card-text">
+                <small class="text-muted">Cập nhật liên tục</small>
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+          <div class="card border-info shadow-sm">
+            <div class="card-body text-center">
+              <i class="fas fa-shield-alt fa-3x text-info mb-3"></i>
+              <h5 class="card-title">Bảo mật</h5>
+              <p class="card-text">Phiên đăng nhập an toàn</p>
+              <p class="card-text">
+                <small class="text-muted">Được bảo vệ bởi Devise</small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="row mt-4">
+        <div class="col-12 text-center">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">
+                <i class="fas fa-cogs me-2"></i>Các thao tác
+              </h5>
+              <p class="card-text">Sử dụng các nút bên dưới để thực hiện các hành động.</p>
+              
+              <%= link_to root_path, class: "btn btn-primary me-2" do %>
+                <i class="fas fa-refresh me-1"></i>Làm mới trang
+              <% end %>
+              
+              <%= link_to destroy_user_session_path, 
+                          class: "btn btn-danger",
+                          data: { "turbo-method": :delete, confirm: "Bạn có chắc chắn muốn đăng xuất?" } do %>
+                <i class="fas fa-sign-out-alt me-1"></i>Đăng xuất
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Update current time every second
+  function updateTime() {
+    const now = new Date();
+    const timeString = now.toLocaleString('vi-VN', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+    document.getElementById('current-time').textContent = timeString;
+  }
+  
+  // Update time immediately and then every second
+  updateTime();
+  setInterval(updateTime, 1000);
+</script>

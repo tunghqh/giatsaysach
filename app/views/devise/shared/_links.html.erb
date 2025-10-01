@@ -1,0 +1,13 @@
+<%- if controller_name != 'sessions' %>
+  <%= link_to new_session_path(resource_name), class: "btn btn-outline-primary btn-sm" do %>
+    <i class="fas fa-sign-in-alt me-1"></i>Đăng nhập
+  <% end %>
+<% end %>
+
+<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+  <div class="mt-2">
+    <%= link_to new_password_path(resource_name), class: "text-decoration-none small" do %>
+      <i class="fas fa-question-circle me-1"></i>Quên mật khẩu?
+    <% end %>
+  </div>
+<% end %>
