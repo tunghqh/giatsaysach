@@ -9,7 +9,13 @@ RUN apt-get update -qq && \
       git \
       libvips \
       curl \
-      default-mysql-client && \
+      default-mysql-client \
+      pkg-config \
+      libssl-dev \
+      libffi-dev \
+      libyaml-dev \
+      libreadline-dev \
+      zlib1g-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set working directory
@@ -26,9 +32,11 @@ RUN gem install bundler
 # Copy gemfiles
 COPY Gemfile ./
 
-# Install gems
+# Install gems step by step for debugging
 RUN bundle config set --local frozen false
-RUN bundle install --jobs 4 --retry 3 --verbose
+RUN bundle config set --local path /usr/local/bundle
+RUN gem install mysql2 -v '0.5.6' --source 'https://rubygems.org/'
+RUN bundle install --jobs 1 --retry 3
 
 # Copy application code
 COPY . .
