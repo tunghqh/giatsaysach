@@ -25,7 +25,7 @@ ENV RAILS_ENV="production" \
 RUN gem install bundler
 
 # Copy gemfiles
-COPY Gemfile ./
+COPY Gemfile Gemfile.lock ./
 
 # Install gems
 RUN bundle install --jobs 4 --retry 3

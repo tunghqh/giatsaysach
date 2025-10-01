@@ -1,0 +1,25 @@
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bootsnap
+  capybara
+  debug
+  devise
+  importmap-rails
+  jbuilder
+  mysql2 (~> 0.5)
+  puma (>= 5.0)
+  rails (~> 7.1.5, >= 7.1.5.2)
+  selenium-webdriver
+  sprockets-rails
+  stimulus-rails
+  turbo-rails
+  tzinfo-data
+  web-console
+
+RUBY VERSION
+   ruby 3.2.0p0
+
+BUNDLED WITH
+   2.4.19
