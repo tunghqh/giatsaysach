@@ -4,20 +4,25 @@
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
   echo "Setting up database..."
   
+  # Debug environment variables
+  echo "DATABASE_URL: ${DATABASE_URL:-'not set'}"
+  echo "DATABASE_HOST: ${DATABASE_HOST:-'not set'}"
+  echo "DATABASE_NAME: ${DATABASE_NAME:-'not set'}"
+
   # Wait for database to be ready
   echo "Waiting for database..."
   sleep 10
-  
+
   # Setup database
   echo "Creating database..."
   ./bin/rails db:create || echo "Database already exists"
-  
+
   echo "Running migrations..."
   ./bin/rails db:migrate
-  
+
   echo "Seeding database..."
   ./bin/rails db:seed || echo "Seeding completed"
-  
+
   echo "Database setup complete!"
 fi
 
