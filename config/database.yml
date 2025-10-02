@@ -49,9 +49,4 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
-  database: <%= ENV.fetch("DATABASE_NAME", "login_production") %>
-  username: <%= ENV.fetch("DATABASE_USERNAME", "login") %>
-  password: <%= ENV["DATABASE_PASSWORD"] %>
-  host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
-  port: <%= ENV.fetch("DATABASE_PORT", "3306") %>
+  url: <%= ENV.fetch("DATABASE_URL") { "mysql2://root:password@localhost:3306/login_production" } %>
