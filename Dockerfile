@@ -44,6 +44,10 @@ COPY . .
 # Precompile assets without database
 RUN SECRET_KEY_BASE_DUMMY=1 RAILS_ENV=production ./bin/rails assets:precompile
 
+# Create entrypoint script first (as root)
+COPY bin/docker-entrypoint /rails/bin/docker-entrypoint
+RUN chmod +x /rails/bin/docker-entrypoint
+
 # Create non-root user
 RUN useradd rails --create-home --shell /bin/bash && \
     chown -R rails:rails /rails
@@ -52,10 +56,6 @@ USER rails:rails
 
 # Expose port
 EXPOSE 3000
-
-# Create entrypoint script
-COPY bin/docker-entrypoint /rails/bin/
-RUN chmod +x /rails/bin/docker-entrypoint
 
 # Start with entrypoint
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
