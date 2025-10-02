@@ -41,8 +41,8 @@ RUN bundle install --jobs 1 --retry 3
 # Copy application code
 COPY . .
 
-# Precompile assets
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# Precompile assets without database
+RUN SECRET_KEY_BASE_DUMMY=1 RAILS_ENV=production ./bin/rails assets:precompile
 
 # Create non-root user
 RUN useradd rails --create-home --shell /bin/bash && \
@@ -53,5 +53,10 @@ USER rails:rails
 # Expose port
 EXPOSE 3000
 
-# Start server
+# Create entrypoint script
+COPY bin/docker-entrypoint /rails/bin/
+RUN chmod +x /rails/bin/docker-entrypoint
+
+# Start with entrypoint
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
