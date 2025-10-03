@@ -40,8 +40,16 @@
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                 <i class="fas fa-user me-1"></i><%= current_user.email %>
+                <span class="badge bg-light text-dark ms-1"><%= current_user.role_text %></span>
               </a>
               <ul class="dropdown-menu">
+                <li class="dropdown-header">
+                  <small class="text-muted">
+                    <i class="fas fa-id-badge me-1"></i>
+                    Vai trò: <strong><%= current_user.role_text %></strong>
+                  </small>
+                </li>
+                <li><hr class="dropdown-divider"></li>
                 <li>
                   <%= link_to destroy_user_session_path, class: "dropdown-item", data: { "turbo-method": :delete, confirm: "Bạn có chắc chắn muốn đăng xuất?" } do %>
                     <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất

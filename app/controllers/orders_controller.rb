@@ -1,10 +1,33 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_order, only: [:show, :edit, :update, :destroy, :start_washing, :complete_washing, :make_payment]
+  before_action :check_admin_permission, only: [:edit, :update, :destroy]
 
   def index
     @orders = Order.includes(:customer).recent
+    
+    # Filter by status
     @orders = @orders.by_status(params[:status]) if params[:status].present?
+    
+    # Search by phone or customer name
+    @orders = @orders.search_by_customer(params[:search].strip) if params[:search].present?
+    
+    # Filter by date
+    if params[:date].present?
+      begin
+        date = Date.parse(params[:date])
+        @orders = @orders.created_on_date(date)
+      rescue ArgumentError
+        # Invalid date format, ignore filter
+      end
+    end
+    
+    # Store search params for view
+    @search_params = {
+      search: params[:search],
+      status: params[:status], 
+      date: params[:date]
+    }
   end
 
   def new
@@ -123,6 +146,12 @@ class OrdersController < ApplicationController
 
   def set_order
     @order = Order.find(params[:id])
+  end
+
+  def check_admin_permission
+    unless current_user.admin?
+      redirect_to orders_path, alert: 'Bạn không có quyền thực hiện hành động này. Chỉ quản lý mới có thể chỉnh sửa/xóa đơn hàng.'
+    end
   end
 
   def order_params

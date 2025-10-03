@@ -48,6 +48,12 @@ class Order < ApplicationRecord
 
   scope :by_status, ->(status) { where(status: status) }
   scope :recent, -> { order(created_at: :desc) }
+  scope :search_by_customer, ->(term) {
+    where("customer_name LIKE ? OR customer_phone LIKE ?", "%#{term}%", "%#{term}%")
+  }
+  scope :created_on_date, ->(date) {
+    where(created_at: date.beginning_of_day..date.end_of_day)
+  }
 
   def laundry_type_text
     LAUNDRY_TYPES.find { |type| type[1] == laundry_type }&.first || laundry_type

@@ -8,8 +8,19 @@
           <%= link_to orders_path, class: "btn btn-outline-secondary me-2" do %>
             <i class="fas fa-arrow-left me-1"></i>Quay lại
           <% end %>
-          <%= link_to edit_order_path(@order), class: "btn btn-outline-primary" do %>
-            <i class="fas fa-edit me-1"></i>Sửa
+          <% if current_user.can_edit_orders? %>
+            <%= link_to edit_order_path(@order), class: "btn btn-outline-primary me-2" do %>
+              <i class="fas fa-edit me-1"></i>Sửa
+            <% end %>
+          <% end %>
+          <% if current_user.can_delete_orders? %>
+            <%= link_to order_path(@order), class: "btn btn-outline-danger",
+                data: {
+                  turbo_method: :delete,
+                  confirm: "Bạn có chắc chắn muốn xóa đơn hàng ##{@order.id}? Hành động này không thể hoàn tác!"
+                } do %>
+              <i class="fas fa-trash me-1"></i>Xóa
+            <% end %>
           <% end %>
         </div>
       </div>
