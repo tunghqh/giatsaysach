@@ -1,0 +1,109 @@
+<div class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-warning text-dark">
+          <h4><i class="fas fa-edit me-2"></i>Chỉnh sửa đơn hàng #<%= @order.id %></h4>
+        </div>
+        <div class="card-body">
+          <%= form_with model: @order, local: true do |form| %>
+            <% if @order.errors.any? %>
+              <div class="alert alert-danger">
+                <h6>Có lỗi xảy ra:</h6>
+                <ul class="mb-0">
+                  <% @order.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <!-- Customer Info Section -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <h5 class="border-bottom pb-2 mb-3">
+                  <i class="fas fa-user me-2"></i>Thông tin khách hàng
+                </h5>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <%= form.label :customer_phone, "Số điện thoại", class: "form-label" %>
+                <%= form.text_field :customer_phone, class: "form-control", required: true %>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <%= form.label :customer_name, "Tên khách hàng", class: "form-label" %>
+                <%= form.text_field :customer_name, class: "form-control", required: true %>
+              </div>
+            </div>
+
+            <!-- Order Details Section -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <h5 class="border-bottom pb-2 mb-3">
+                  <i class="fas fa-tshirt me-2"></i>Chi tiết đơn hàng
+                </h5>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <%= form.label :laundry_type, "Loại giặt", class: "form-label" %>
+                <%= form.select :laundry_type, options_for_select(Order::LAUNDRY_TYPES, @order.laundry_type),
+                    { prompt: "Chọn loại giặt" },
+                    { class: "form-select", required: true } %>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Giặt đồ trắng riêng</label>
+                <div class="form-check form-switch">
+                  <%= form.check_box :separate_whites, class: "form-check-input", role: "switch" %>
+                  <%= form.label :separate_whites, "Có giặt riêng", class: "form-check-label" %>
+                </div>
+              </div>
+            </div>
+
+            <!-- Weight & Amount (if completed) -->
+            <% if @order.completed? %>
+              <div class="row mb-4">
+                <div class="col-12">
+                  <h5 class="border-bottom pb-2 mb-3">
+                    <i class="fas fa-check me-2"></i>Thông tin hoàn thành
+                  </h5>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <%= form.label :weight, "Cân nặng (kg)", class: "form-label" %>
+                  <%= form.number_field :weight, class: "form-control", step: 0.1, min: 0 %>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <%= form.label :total_amount, "Tổng tiền (₫)", class: "form-label" %>
+                  <%= form.number_field :total_amount, class: "form-control", min: 0 %>
+                </div>
+              </div>
+            <% end %>
+
+            <!-- Actions -->
+            <div class="d-flex justify-content-between">
+              <%= link_to @order, class: "btn btn-secondary" do %>
+                <i class="fas fa-arrow-left me-2"></i>Quay lại
+              <% end %>
+
+              <div>
+                <%= link_to @order,
+                    class: "btn btn-danger me-2",
+                    data: {
+                      turbo_method: :delete,
+                      confirm: "Bạn có chắc chắn muốn xóa đơn hàng này?"
+                    } do %>
+                  <i class="fas fa-trash me-2"></i>Xóa
+                <% end %>
+
+                <%= form.submit "Cập nhật đơn hàng", class: "btn btn-warning" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,197 @@
+<div class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4><i class="fas fa-plus me-2"></i>Tạo đơn hàng mới</h4>
+        </div>
+        <div class="card-body">
+          <%= form_with model: @order, local: true do |form| %>
+            <% if @order.errors.any? %>
+              <div class="alert alert-danger">
+                <h6>Có lỗi xảy ra:</h6>
+                <ul class="mb-0">
+                  <% @order.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <!-- Customer Info Section -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <h5 class="border-bottom pb-2 mb-3">
+                  <i class="fas fa-user me-2"></i>Thông tin khách hàng
+                </h5>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <%= form.label :customer_phone, class: "form-label" do %>
+                  <i class="fas fa-phone me-1"></i>Số điện thoại
+                <% end %>
+                <%= form.text_field :customer_phone, class: "form-control", placeholder: "Nhập số điện thoại", required: true %>
+                <small class="form-text text-muted">Tự động tìm khách hàng cũ khi nhập đủ số</small>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <%= form.label :customer_name, class: "form-label" do %>
+                  <i class="fas fa-user me-1"></i>Tên khách hàng
+                <% end %>
+                <%= form.text_field :customer_name, class: "form-control", placeholder: "Nhập tên khách hàng", required: true %>
+                <small class="form-text text-muted">Nhấp vào để chỉnh sửa nếu đã tự động điền</small>
+              </div>
+            </div>
+
+            <!-- Order Details Section -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <h5 class="border-bottom pb-2 mb-3">
+                  <i class="fas fa-tshirt me-2"></i>Chi tiết đơn hàng
+                </h5>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <%= form.label :laundry_type, "Loại giặt", class: "form-label" %>
+                <%= form.select :laundry_type, options_for_select(Order::LAUNDRY_TYPES),
+                    { prompt: "Chọn loại giặt" },
+                    { class: "form-select", required: true } %>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Giặt đồ trắng riêng</label>
+                <div class="form-check form-switch">
+                  <%= form.check_box :separate_whites, class: "form-check-input", role: "switch" %>
+                  <%= form.label :separate_whites, "Có giặt riêng", class: "form-check-label" %>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex justify-content-between">
+              <%= link_to orders_path, class: "btn btn-secondary" do %>
+                <i class="fas fa-arrow-left me-2"></i>Quay lại
+              <% end %>
+
+              <%= form.submit "Tạo đơn hàng", class: "btn btn-primary" do %>
+                <i class="fas fa-save me-2"></i>Tạo đơn hàng
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const phoneInput = document.getElementById('order_customer_phone');
+  const nameInput = document.getElementById('order_customer_name');
+  let searchTimeout;
+
+  // Auto-fill customer info if found
+  phoneInput.addEventListener('input', function() {
+    const phone = this.value.trim();
+
+    // Clear any existing timeout
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+
+    // Remove any existing alerts
+    const existingAlerts = this.parentNode.querySelectorAll('.alert');
+    existingAlerts.forEach(alert => alert.remove());
+
+    if (phone.length >= 10) { // Only search when phone number has at least 10 digits
+      // Add loading indicator
+      const loadingIcon = document.createElement('div');
+      loadingIcon.className = 'text-muted small mt-1';
+      loadingIcon.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Đang tìm kiếm...';
+      loadingIcon.id = 'loading-indicator';
+      this.parentNode.appendChild(loadingIcon);
+
+      // Debounce search
+      searchTimeout = setTimeout(() => {
+        fetch('<%= search_customer_path %>?phone=' + encodeURIComponent(phone))
+          .then(response => response.json())
+          .then(data => {
+            // Remove loading indicator
+            const loading = document.getElementById('loading-indicator');
+            if (loading) loading.remove();
+
+            if (data.found && data.customer) {
+              nameInput.value = data.customer.name;
+              nameInput.readOnly = true;
+              nameInput.classList.add('bg-light');
+
+              // Show success message
+              const alert = document.createElement('div');
+              alert.className = 'alert alert-success alert-dismissible fade show mt-2';
+              alert.innerHTML = `
+                <i class="fas fa-check-circle me-2"></i>Đã tìm thấy khách hàng: <strong>${data.customer.name}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              `;
+              phoneInput.parentNode.appendChild(alert);
+
+              // Auto remove alert after 4 seconds
+              setTimeout(() => {
+                if (alert.parentNode) {
+                  alert.remove();
+                }
+              }, 4000);
+            } else {
+              // Clear name field and make it editable for new customer
+              nameInput.readOnly = false;
+              nameInput.classList.remove('bg-light');
+              if (!nameInput.value) {
+                nameInput.focus();
+              }
+
+              // Show info message for new customer
+              const alert = document.createElement('div');
+              alert.className = 'alert alert-info alert-dismissible fade show mt-2';
+              alert.innerHTML = `
+                <i class="fas fa-info-circle me-2"></i>Khách hàng mới - vui lòng nhập tên
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              `;
+              phoneInput.parentNode.appendChild(alert);
+
+              setTimeout(() => {
+                if (alert.parentNode) {
+                  alert.remove();
+                }
+              }, 3000);
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            // Remove loading indicator
+            const loading = document.getElementById('loading-indicator');
+            if (loading) loading.remove();
+
+            // Make name field editable
+            nameInput.readOnly = false;
+            nameInput.classList.remove('bg-light');
+          });
+      }, 500); // 500ms delay
+    } else {
+      // Reset name field for short phone numbers
+      nameInput.readOnly = false;
+      nameInput.classList.remove('bg-light');
+    }
+  });
+
+  // Allow editing name field when clicked (even for existing customers)
+  nameInput.addEventListener('click', function() {
+    if (this.readOnly) {
+      const confirmed = confirm('Bạn có muốn chỉnh sửa tên khách hàng này không?');
+      if (confirmed) {
+        this.readOnly = false;
+        this.classList.remove('bg-light');
+        this.focus();
+      }
+    }
+  });
+});
+</script>

@@ -1,0 +1,327 @@
+<div class="container my-4">
+  <div class="row">
+    <div class="col-12">
+      <!-- Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-receipt me-2"></i>Đơn hàng #<%= @order.id %></h1>
+        <div>
+          <%= link_to orders_path, class: "btn btn-outline-secondary me-2" do %>
+            <i class="fas fa-arrow-left me-1"></i>Quay lại
+          <% end %>
+          <%= link_to edit_order_path(@order), class: "btn btn-outline-primary" do %>
+            <i class="fas fa-edit me-1"></i>Sửa
+          <% end %>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Order Info -->
+        <div class="col-md-8">
+          <div class="card mb-4">
+            <div class="card-header bg-light">
+              <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Thông tin đơn hàng</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <strong>Khách hàng:</strong>
+                  <p class="mb-1"><%= @order.customer_name %></p>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <strong>Số điện thoại:</strong>
+                  <p class="mb-1"><%= @order.customer_phone %></p>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <strong>Loại giặt:</strong>
+                  <p class="mb-1"><%= @order.laundry_type_text %></p>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <strong>Giặt đồ trắng riêng:</strong>
+                  <p class="mb-1">
+                    <% if @order.separate_whites? %>
+                      <span class="badge bg-warning">Có</span>
+                    <% else %>
+                      <span class="badge bg-secondary">Không</span>
+                    <% end %>
+                  </p>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <strong>Ngày tạo:</strong>
+                  <p class="mb-1"><%= @order.created_at.strftime("%d/%m/%Y %H:%M") %></p>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <strong>Cập nhật cuối:</strong>
+                  <p class="mb-1"><%= @order.updated_at.strftime("%d/%m/%Y %H:%M") %></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="card mb-4">
+            <div class="card-header bg-light">
+              <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Lịch sử thực hiện</h5>
+            </div>
+            <div class="card-body">
+              <div class="timeline">
+                <% if @order.received_at.present? %>
+                  <div class="timeline-item">
+                    <div class="timeline-icon bg-warning">
+                      <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <h6>Nhận đơn</h6>
+                      <small class="text-muted"><%= @order.received_at.strftime("%d/%m/%Y %H:%M") %></small>
+                    </div>
+                  </div>
+                <% end %>
+
+                <% if @order.started_washing_at.present? %>
+                  <div class="timeline-item">
+                    <div class="timeline-icon bg-info">
+                      <i class="fas fa-play"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <h6>Bắt đầu giặt</h6>
+                      <small class="text-muted"><%= @order.started_washing_at.strftime("%d/%m/%Y %H:%M") %></small>
+                    </div>
+                  </div>
+                <% end %>
+
+                <% if @order.completed_washing_at.present? %>
+                  <div class="timeline-item">
+                    <div class="timeline-icon bg-success">
+                      <i class="fas fa-check"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <h6>Hoàn thành giặt</h6>
+                      <small class="text-muted"><%= @order.completed_washing_at.strftime("%d/%m/%Y %H:%M") %></small>
+                    </div>
+                  </div>
+                <% end %>
+
+                <% if @order.paid_at.present? %>
+                  <div class="timeline-item">
+                    <div class="timeline-icon bg-primary">
+                      <i class="fas fa-money-check-alt"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <h6>Đã thanh toán</h6>
+                      <small class="text-muted"><%= @order.paid_at.strftime("%d/%m/%Y %H:%M") %></small>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weight & Amount (if completed or paid) -->
+          <% if @order.completed? || @order.paid? %>
+            <div class="card mb-4">
+              <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-check me-2"></i>Thông tin hoàn thành</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <strong>Cân nặng:</strong>
+                    <p class="mb-1 h5"><%= @order.weight %>kg</p>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <strong>Tổng tiền:</strong>
+                    <p class="mb-1 h5 text-success">
+                      <%= number_to_currency(@order.total_amount, unit: "₫", separator: ",", delimiter: ".") %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+          <!-- Payment Information -->
+          <% if @order.completed? || @order.paid? %>
+            <div class="card mb-4">
+              <div class="card-header <%= @order.paid? ? 'bg-primary text-white' : 'bg-warning' %>">
+                <h5 class="mb-0">
+                  <i class="fas fa-money-check-alt me-2"></i>Thông tin thanh toán
+                </h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-12 mb-3">
+                    <strong>Trạng thái thanh toán:</strong>
+                    <p class="mb-1">
+                      <% if @order.payment_completed? %>
+                        <span class="badge bg-success fs-6 p-2">
+                          <i class="fas fa-check-circle me-1"></i>Đã thanh toán
+                        </span>
+                      <% else %>
+                        <span class="badge bg-danger fs-6 p-2">
+                          <i class="fas fa-times-circle me-1"></i>Chưa thanh toán
+                        </span>
+                      <% end %>
+                    </p>
+                  </div>
+                  <% if @order.payment_completed? && @order.payment_method.present? %>
+                    <div class="col-12 mb-3">
+                      <strong>Phương thức thanh toán:</strong>
+                      <p class="mb-1">
+                        <span class="badge bg-info">
+                          <%= @order.payment_method == 'cash' ? 'Tiền mặt' : 'Chuyển khoản' %>
+                        </span>
+                      </p>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Status & Actions -->
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>Trạng thái & Thao tác</h5>
+            </div>
+            <div class="card-body">
+              <!-- Current Status -->
+              <div class="mb-4">
+                <h6>Trạng thái hiện tại:</h6>
+                <% case @order.status %>
+                <% when 'received' %>
+                  <span class="badge bg-warning fs-6 p-2">
+                    <i class="fas fa-clock me-1"></i><%= @order.status_text %>
+                  </span>
+                <% when 'washing' %>
+                  <span class="badge bg-info fs-6 p-2">
+                    <i class="fas fa-sync-alt me-1"></i><%= @order.status_text %>
+                  </span>
+                <% when 'completed' %>
+                  <span class="badge bg-success fs-6 p-2">
+                    <i class="fas fa-check me-1"></i><%= @order.status_text %>
+                  </span>
+                <% when 'paid' %>
+                  <span class="badge bg-primary fs-6 p-2">
+                    <i class="fas fa-money-check-alt me-1"></i><%= @order.status_text %>
+                  </span>
+                <% end %>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="d-grid gap-2">
+                <% if @order.received? %>
+                  <%= link_to start_washing_order_path(@order),
+                      class: "btn btn-info",
+                      data: {
+                        turbo_method: :patch,
+                        confirm: "Bắt đầu giặt đơn hàng này?"
+                      } do %>
+                    <i class="fas fa-play me-2"></i>Bắt đầu giặt
+                  <% end %>
+                <% elsif @order.washing? %>
+                  <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#completeModal">
+                    <i class="fas fa-check me-2"></i>Hoàn thành giặt
+                  </button>
+                <% elsif @order.completed? %>
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentModal">
+                    <i class="fas fa-money-check-alt me-2"></i>Thanh toán
+                  </button>
+                <% elsif @order.paid? %>
+                  <div class="alert alert-primary mb-0">
+                    <i class="fas fa-check-circle me-2"></i>Đã thanh toán
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Complete Washing Modal -->
+<% if @order.washing? %>
+  <div class="modal fade" id="completeModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title"><i class="fas fa-check me-2"></i>Hoàn thành giặt</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <%= form_with url: complete_washing_order_path(@order), method: :patch, local: true do |form| %>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="weight" class="form-label">Cân nặng (kg)</label>
+              <input type="number" class="form-control" id="weight" name="weight" step="0.1" min="0" required>
+            </div>
+            <div class="mb-3">
+              <label for="total_amount" class="form-label">Tổng tiền (₫)</label>
+              <input type="number" class="form-control" id="total_amount" name="total_amount" min="0" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-success">
+              <i class="fas fa-save me-2"></i>Hoàn thành
+            </button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<!-- Payment Modal -->
+<% if @order.completed? %>
+  <div class="modal fade" id="paymentModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title"><i class="fas fa-money-check-alt me-2"></i>Thanh toán đơn hàng</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <%= form_with url: make_payment_order_path(@order), method: :patch, local: true do |form| %>
+          <div class="modal-body">
+            <div class="mb-3">
+              <strong>Tổng tiền cần thanh toán:</strong>
+              <p class="h4 text-primary">
+                <%= number_to_currency(@order.total_amount, unit: "₫", separator: ",", delimiter: ".") %>
+              </p>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Phương thức thanh toán</label>
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-check form-check-custom">
+                    <input class="form-check-input" type="radio" name="payment_method" id="cash" value="cash" checked>
+                    <label class="form-check-label w-100 p-3 border rounded text-center" for="cash">
+                      <i class="fas fa-money-bill-wave fa-2x d-block mb-2 text-success"></i>
+                      <strong>Tiền mặt</strong>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check form-check-custom">
+                    <input class="form-check-input" type="radio" name="payment_method" id="transfer" value="transfer">
+                    <label class="form-check-label w-100 p-3 border rounded text-center" for="transfer">
+                      <i class="fas fa-credit-card fa-2x d-block mb-2 text-info"></i>
+                      <strong>Chuyển khoản</strong>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-check me-2"></i>Xác nhận thanh toán
+            </button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

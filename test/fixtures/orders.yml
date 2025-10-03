@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  customer: one
+  customer_name: MyString
+  customer_phone: MyString
+  laundry_type: MyString
+  separate_whites: false
+  status: 1
+  weight: 9.99
+  total_amount: 9.99
+  created_at: 2025-10-03 11:24:55
+
+two:
+  customer: two
+  customer_name: MyString
+  customer_phone: MyString
+  laundry_type: MyString
+  separate_whites: false
+  status: 1
+  weight: 9.99
+  total_amount: 9.99
+  created_at: 2025-10-03 11:24:55

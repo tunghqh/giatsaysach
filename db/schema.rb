@@ -10,7 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_01_080926) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_03_043920) do
+  create_table "customers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "phone", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["phone"], name: "index_customers_on_phone", unique: true
+  end
+
+  create_table "orders", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.string "customer_name", null: false
+    t.string "customer_phone", null: false
+    t.string "laundry_type", null: false
+    t.boolean "separate_whites", default: false
+    t.integer "status", default: 0
+    t.decimal "weight", precision: 8, scale: 2
+    t.decimal "total_amount", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "payment_method"
+    t.integer "payment_status", default: 0
+    t.datetime "received_at"
+    t.datetime "started_washing_at"
+    t.datetime "completed_washing_at"
+    t.datetime "paid_at"
+    t.index ["customer_id"], name: "index_orders_on_customer_id"
+    t.index ["customer_phone"], name: "index_orders_on_customer_phone"
+    t.index ["payment_status"], name: "index_orders_on_payment_status"
+    t.index ["status"], name: "index_orders_on_status"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -23,4 +54,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_01_080926) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "orders", "customers"
 end
