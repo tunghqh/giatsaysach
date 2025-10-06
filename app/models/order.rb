@@ -57,6 +57,12 @@ class Order < ApplicationRecord
     where(created_at: date.beginning_of_day..date.end_of_day)
   }
 
+  scope :paid_on_date, ->(date) {
+    where(paid_at: date.beginning_of_day..date.end_of_day)
+  }
+
+  scope :paid_between_dates, -> (start_date, end_date){ where(paid_at: start_date..end_date) }
+
   def laundry_type_text
     LAUNDRY_TYPES.find { |type| type[1] == laundry_type }&.first || laundry_type
   end

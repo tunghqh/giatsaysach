@@ -12,11 +12,16 @@ class OrdersController < ApplicationController
     # Search by phone or customer name
     @orders = @orders.search_by_customer(params[:search].strip) if params[:search].present?
 
-    # Filter by date
+
+    # Filter by date type (created_at or paid_at)
     if params[:date].present?
       begin
         date = Date.parse(params[:date])
-        @orders = @orders.created_on_date(date)
+        if params[:date_type] == 'paid_at'
+          @orders = @orders.paid_on_date(date)
+        else
+          @orders = @orders.created_on_date(date)
+        end
       rescue ArgumentError
         # Invalid date format, ignore filter
       end
@@ -26,7 +31,8 @@ class OrdersController < ApplicationController
     @search_params = {
       search: params[:search],
       status: params[:status],
-      date: params[:date]
+      date: params[:date],
+      date_type: params[:date_type]
     }
   end
 
@@ -149,7 +155,7 @@ class OrdersController < ApplicationController
       redirect_to @order, alert: 'Chỉ có thể in hóa đơn cho đơn hàng đã hoàn thành.'
       return
     end
-    
+
     respond_to do |format|
       format.html { render layout: 'print' }
       format.pdf do

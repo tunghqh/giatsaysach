@@ -25,9 +25,17 @@
               { class: "form-select" } %>
         </div>
         <div class="col-md-3">
-          <%= form.date_field :date, value: params[:date],
-              class: "form-control",
-              placeholder: "Chọn ngày tạo..." %>
+          <div class="input-group">
+            <%= form.date_field :date, value: params[:date],
+                class: "form-control",
+                placeholder: "Chọn ngày..." %>
+            <%= form.select :date_type, options_for_select([
+                  ['Ngày tạo đơn', 'created_at'],
+                  ['Ngày thanh toán', 'paid_at']
+                ], params[:date_type] || 'created_at'),
+                {},
+                { class: "form-select", style: "max-width: 150px;" } %>
+          </div>
         </div>
         <div class="col-md-2">
           <div class="btn-group w-100" role="group">

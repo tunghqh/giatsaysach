@@ -39,6 +39,9 @@
 # Ignore secrets
 /config/secrets.yml
 
+# Ignore Gemfile.lock
+Gemfile.lock
+
 # Ignore environment variables
 .env
 .env.local

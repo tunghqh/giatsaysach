@@ -1,0 +1,66 @@
+<div class="container my-4">
+  <h1 class="mb-4"><i class="fas fa-chart-bar me-2"></i>Thống kê đơn hàng</h1>
+  <div class="card mb-4">
+    <div class="card-body">
+      <%= form_with url: statistics_path, method: :get, local: true, class: "row g-3" do |form| %>
+        <div class="col-md-4">
+          <%= form.label :from_date, "Từ ngày" %>
+          <%= form.date_field :from_date, value: params[:from_date] || @from_date, class: "form-control" %>
+        </div>
+        <div class="col-md-4">
+          <%= form.label :to_date, "Đến ngày" %>
+          <%= form.date_field :to_date, value: params[:to_date] || @to_date, class: "form-control" %>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <%= form.submit "Xem thống kê", class: "btn btn-primary w-100" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Tổng số đơn vào</h5>
+          <p class="card-text display-6"><%= @total_orders %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Số đơn thanh toán</h5>
+          <p class="card-text display-6"><%= @paid_orders %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Tiền mặt đã thanh toán</h5>
+          <p class="card-text display-6 text-success"><%= number_to_currency(@cash_total, unit: "đ", delimiter: ".", precision: 0, format: "%n%u") %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Chuyển khoản đã thanh toán</h5>
+          <p class="card-text display-6 text-info"><%= number_to_currency(@transfer_total, unit: "đ", delimiter: ".", precision: 0, format: "%n%u") %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Tổng tiền đã thanh toán</h5>
+          <p class="card-text display-6 text-primary"><%= number_to_currency(@total_paid, unit: "đ", delimiter: ".", precision: 0, format: "%n%u") %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
