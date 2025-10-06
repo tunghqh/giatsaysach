@@ -8,8 +8,8 @@
     <div class="card-body">
       <%= form_with url: orders_path, method: :get, local: true, class: "row g-3" do |form| %>
         <div class="col-md-4">
-          <%= form.text_field :search, value: params[:search], 
-              class: "form-control", 
+          <%= form.text_field :search, value: params[:search],
+              class: "form-control",
               placeholder: "Tìm theo SĐT hoặc tên khách hàng...",
               id: "search-input" %>
         </div>
@@ -17,16 +17,16 @@
           <%= form.select :status, options_for_select([
                 ['Tất cả trạng thái', ''],
                 ['Nhận đơn', 'received'],
-                ['Đang giặt', 'washing'], 
+                ['Đang giặt', 'washing'],
                 ['Hoàn thành', 'completed'],
                 ['Đã thanh toán', 'paid']
-              ], params[:status]), 
-              {}, 
+              ], params[:status]),
+              {},
               { class: "form-select" } %>
         </div>
         <div class="col-md-3">
-          <%= form.date_field :date, value: params[:date], 
-              class: "form-control", 
+          <%= form.date_field :date, value: params[:date],
+              class: "form-control",
               placeholder: "Chọn ngày tạo..." %>
         </div>
         <div class="col-md-2">
@@ -40,7 +40,7 @@
           </div>
         </div>
       <% end %>
-      
+
       <% if params[:search].present? || params[:date].present? %>
         <div class="mt-3">
           <small class="text-muted">
@@ -158,10 +158,10 @@
                       <% end %>
                     <% end %>
                     <% if current_user.can_delete_orders? %>
-                      <%= link_to order_path(order), class: "btn btn-sm btn-outline-danger", 
-                          data: { 
-                            turbo_method: :delete, 
-                            confirm: "Bạn có chắc chắn muốn xóa đơn hàng ##{order.id}?" 
+                      <%= link_to order_path(order), class: "btn btn-sm btn-outline-danger",
+                          data: {
+                            turbo_method: :delete,
+                            confirm: "Bạn có chắc chắn muốn xóa đơn hàng ##{order.id}?"
                           } do %>
                         <i class="fas fa-trash"></i>
                       <% end %>
@@ -197,14 +197,14 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const searchInput = document.getElementById('search-input');
-  
+
   if (searchInput) {
     // Auto focus search input if there's a search term
     if (searchInput.value) {
       searchInput.focus();
       searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
     }
-    
+
     // Add search shortcuts
     searchInput.addEventListener('keydown', function(e) {
       // Clear search with Esc
@@ -213,17 +213,17 @@ document.addEventListener('DOMContentLoaded', function() {
         e.target.form.submit();
       }
     });
-    
+
     // Add placeholder animation on focus
     searchInput.addEventListener('focus', function() {
       this.placeholder = 'Nhập số điện thoại hoặc tên khách hàng...';
     });
-    
+
     searchInput.addEventListener('blur', function() {
       this.placeholder = 'Tìm theo SĐT hoặc tên khách hàng...';
     });
   }
-  
+
   // Highlight search terms in results
   const searchTerm = '<%= j(params[:search] || "") %>';
   if (searchTerm.length > 0) {
@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function highlightSearchTerms(term) {
   const regex = new RegExp(`(${term})`, 'gi');
   const cells = document.querySelectorAll('td:nth-child(2), td:nth-child(3)'); // Customer name and phone columns
-  
+
   cells.forEach(cell => {
     if (cell.textContent.toLowerCase().includes(term.toLowerCase())) {
       cell.innerHTML = cell.innerHTML.replace(regex, '<mark class="bg-warning">$1</mark>');

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: 'Times New Roman', serif;
+      margin: 0;
+      padding: 20px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .invoice-container {
+      max-width: 340px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .customer-name {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .order-number {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .service-details {
+      margin: 20px 0;
+      line-height: 1.8;
+    }
+
+    .service-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .total-amount {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      margin: 20px 0;
+      padding: 10px;
+      border: 2px solid #333;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    @media print {
+      body { margin: 0; padding: 10px; }
+      .invoice-container {
+        padding: 10px;
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">🧺 GIẶT SẤY SẠCH</div>
+      <div class="order-number">
+        Đơn hàng <%= @order.id %>
+      </div>
+      <div class="customer-name"><%= @order.customer.name %> - <%= @order.customer.phone %></div>
+    </div>
+
+    <!-- Service Details -->
+    <div class="service-details">
+      <div class="service-row">
+        <span>Loại giặt:</span>
+        <span><%= @order.laundry_type == 'daily' ? 'Dân sinh' :
+                   @order.laundry_type == 'bleach' ? 'Đồ tẩy' :
+                   @order.laundry_type == 'blanket' ? 'Chăn' :
+                   @order.laundry_type == 'curtain' ? 'Màn' : 'Khác' %></span>
+      </div>
+
+      <div class="service-row">
+        <span>Đơn giá:</span>
+        <span><%= number_to_currency((@order.total_amount / @order.weight).to_i, unit: "đ", delimiter: ".", precision: 0, format: "%n%u") %></span>
+      </div>
+
+      <div class="service-row">
+        <span>Cân nặng:</span>
+        <span><%= @order.weight %> kg</span>
+      </div>
+
+      <div class="service-row">
+        <span>Thành tiền:</span>
+        <span><%= number_to_currency(@order.total_amount.to_i, unit: "đ", delimiter: ".", precision: 0, format: "%n%u") %></span>
+      </div>
+
+      <div class="service-row">
+        <span>Phí ship:</span>
+        <span><%= number_to_currency((@order.shipping_fee).to_i, unit: "đ", delimiter: ".", precision: 0, format: "%n%u") %></span>
+      </div>
+
+      <div class="service-row">
+        <span>Phụ thu:</span>
+        <span><%= number_to_currency((@order.extra_fee).to_i, unit: "đ", delimiter: ".", precision: 0, format: "%n%u") %></span>
+      </div>
+    </div>
+
+    <!-- Total Amount -->
+    <div class="total-amount">
+      Tổng cộng: <%= number_to_currency((@order.final_total_amount).to_i, unit: "đ", delimiter: ".", precision: 0, format: "%n%u") %>
+    </div>
+
+    <!-- QR Code for bank transfer -->
+    <div style="text-align:center; margin: 16px 0 8px 0;">
+      <img src="<%= asset_path('qr_bank.png') %>" alt="QR chuyển khoản" style="width:120px; height:120px; object-fit:contain; border:1px solid #eee; padding:4px; background:#fff;" />
+      <div style="font-size:12px; color:#666; margin-top:4px;">Quét mã để chuyển khoản</div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div>Giặt sấy sạch</div>
+      <div><i class="fas fa-map-marker-alt me-2"></i> 99 Phan Thanh, Thanh Khê, Đà Nẵng | <i class="fas fa-phone me-2"></i>0926 805 916</div>
+      <div style="margin-top: 10px; font-weight: bold;">Cảm ơn quý khách!</div>
+    </div>
+  </div>
+</body>
+</html>

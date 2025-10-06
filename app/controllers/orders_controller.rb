@@ -1,17 +1,17 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_order, only: [:show, :edit, :update, :destroy, :start_washing, :complete_washing, :make_payment]
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :start_washing, :complete_washing, :make_payment, :print_invoice]
   before_action :check_admin_permission, only: [:edit, :update, :destroy]
 
   def index
     @orders = Order.includes(:customer).recent
-    
+
     # Filter by status
     @orders = @orders.by_status(params[:status]) if params[:status].present?
-    
+
     # Search by phone or customer name
     @orders = @orders.search_by_customer(params[:search].strip) if params[:search].present?
-    
+
     # Filter by date
     if params[:date].present?
       begin
@@ -21,11 +21,11 @@ class OrdersController < ApplicationController
         # Invalid date format, ignore filter
       end
     end
-    
+
     # Store search params for view
     @search_params = {
       search: params[:search],
-      status: params[:status], 
+      status: params[:status],
       date: params[:date]
     }
   end
@@ -99,7 +99,9 @@ class OrdersController < ApplicationController
         @order.update(
           status: :completed,
           weight: params[:weight],
-          total_amount: params[:total_amount]
+          total_amount: params[:total_amount],
+          shipping_fee: params[:shipping_fee].present? ? params[:shipping_fee] : 0,
+          extra_fee: params[:extra_fee].present? ? params[:extra_fee] : 0
         )
         redirect_to @order, notice: 'Đã hoàn thành giặt.'
       else
@@ -142,6 +144,21 @@ class OrdersController < ApplicationController
     end
   end
 
+  def print_invoice
+    unless @order.completed? || @order.paid?
+      redirect_to @order, alert: 'Chỉ có thể in hóa đơn cho đơn hàng đã hoàn thành.'
+      return
+    end
+    
+    respond_to do |format|
+      format.html { render layout: 'print' }
+      format.pdf do
+        # For future PDF generation if needed
+        render html: render_to_string(layout: 'print')
+      end
+    end
+  end
+
   private
 
   def set_order
@@ -155,6 +172,6 @@ class OrdersController < ApplicationController
   end
 
   def order_params
-    params.require(:order).permit(:customer_name, :customer_phone, :laundry_type, :separate_whites, :weight, :total_amount)
+    params.require(:order).permit(:customer_name, :customer_phone, :laundry_type, :separate_whites, :weight, :total_amount, :shipping_fee, :extra_fee)
   end
 end

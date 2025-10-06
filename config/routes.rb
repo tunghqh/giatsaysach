@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       patch :start_washing
       patch :complete_washing
       patch :make_payment
+      get :print_invoice
     end
   end
 

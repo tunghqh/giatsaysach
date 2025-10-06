@@ -36,6 +36,8 @@ class Order < ApplicationRecord
   validates :weight, presence: true, if: :completed_or_paid?
   validates :total_amount, presence: true, if: :completed_or_paid?
   validates :payment_method, presence: true, if: :payment_status_paid?
+  validates :shipping_fee, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :extra_fee, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   # Custom validation methods
   def completed_or_paid?
@@ -70,6 +72,16 @@ class Order < ApplicationRecord
 
   def payment_method_text
     PAYMENT_METHODS.find { |method| method[1] == payment_method }&.first || payment_method
+  end
+
+  # Calculate final total amount including fees
+  def final_total_amount
+    total_amount + shipping_fee + extra_fee
+  end
+
+  # Calculate subtotal (before fees)
+  def subtotal
+    total_amount
   end
 
   # Callbacks to set timestamps

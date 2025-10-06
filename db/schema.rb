@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_03_102150) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_06_030418) do
   create_table "customers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "phone", null: false
@@ -36,6 +36,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_03_102150) do
     t.datetime "started_washing_at"
     t.datetime "completed_washing_at"
     t.datetime "paid_at"
+    t.decimal "shipping_fee", precision: 10, scale: 2, default: "0.0"
+    t.decimal "extra_fee", precision: 10, scale: 2, default: "0.0"
     t.index ["customer_id"], name: "index_orders_on_customer_id"
     t.index ["customer_phone"], name: "index_orders_on_customer_phone"
     t.index ["payment_status"], name: "index_orders_on_payment_status"

@@ -8,6 +8,11 @@
           <%= link_to orders_path, class: "btn btn-outline-secondary me-2" do %>
             <i class="fas fa-arrow-left me-1"></i>Quay lại
           <% end %>
+          <% if @order.completed? || @order.paid? %>
+            <button onclick="printInvoice(<%= @order.id %>)" class="btn btn-success me-2">
+              <i class="fas fa-print me-1"></i>In hóa đơn
+            </button>
+          <% end %>
           <% if current_user.can_edit_orders? %>
             <%= link_to edit_order_path(@order), class: "btn btn-outline-primary me-2" do %>
               <i class="fas fa-edit me-1"></i>Sửa
@@ -141,9 +146,25 @@
                   <div class="col-md-6 mb-3">
                     <strong>Tổng tiền:</strong>
                     <p class="mb-1 h5 text-success">
-                      <%= number_to_currency(@order.total_amount, unit: "₫", separator: ",", delimiter: ".") %>
+                      <%= number_to_currency(@order.final_total_amount, unit: "₫", separator: ",", delimiter: ".") %>
                     </p>
                   </div>
+                  <% if @order.shipping_fee > 0 %>
+                  <div class="col-md-6 mb-3">
+                    <strong>Phí ship:</strong>
+                    <p class="mb-1 h5 text-info">
+                      <%= number_to_currency(@order.shipping_fee, unit: "₫", separator: ",", delimiter: ".") %>
+                    </p>
+                  </div>
+                  <% end %>
+                  <% if @order.extra_fee > 0 %>
+                  <div class="col-md-6 mb-3">
+                    <strong>Phụ thu:</strong>
+                    <p class="mb-1 h5 text-warning">
+                      <%= number_to_currency(@order.extra_fee, unit: "₫", separator: ",", delimiter: ".") %>
+                    </p>
+                  </div>
+                  <% end %>
                 </div>
               </div>
             </div>
@@ -238,8 +259,14 @@
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentModal">
                     <i class="fas fa-money-check-alt me-2"></i>Thanh toán
                   </button>
+                  <%= link_to print_invoice_order_path(@order), class: "btn btn-outline-success", target: "_blank" do %>
+                    <i class="fas fa-print me-2"></i>In hóa đơn
+                  <% end %>
                 <% elsif @order.paid? %>
-                  <div class="alert alert-primary mb-0">
+                  <%= link_to print_invoice_order_path(@order), class: "btn btn-success", target: "_blank" do %>
+                    <i class="fas fa-print me-2"></i>In hóa đơn
+                  <% end %>
+                  <div class="alert alert-primary mb-0 mt-2">
                     <i class="fas fa-check-circle me-2"></i>Đã thanh toán
                   </div>
                 <% end %>
@@ -270,6 +297,14 @@
             <div class="mb-3">
               <label for="total_amount" class="form-label">Tổng tiền (₫)</label>
               <input type="number" class="form-control" id="total_amount" name="total_amount" min="0" required>
+            </div>
+            <div class="mb-3">
+              <label for="shipping_fee" class="form-label">Phí ship (₫)</label>
+              <input type="number" class="form-control" id="shipping_fee" name="shipping_fee" min="0" value="0">
+            </div>
+            <div class="mb-3">
+              <label for="extra_fee" class="form-label">Phụ thu (₫)</label>
+              <input type="number" class="form-control" id="extra_fee" name="extra_fee" min="0" value="0">
             </div>
           </div>
           <div class="modal-footer">
@@ -336,3 +371,24 @@
     </div>
   </div>
 <% end %>
+
+<script>
+function printInvoice(orderId) {
+  fetch(`/orders/${orderId}/print_invoice`)
+    .then(response => response.text())
+    .then(html => {
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(html);
+      printWindow.document.close();
+      
+      printWindow.onload = function() {
+        printWindow.print();
+        printWindow.close();
+      };
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Có lỗi xảy ra khi in hóa đơn');
+    });
+}
+</script>
