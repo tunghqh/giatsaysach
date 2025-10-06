@@ -380,7 +380,7 @@ function printInvoice(orderId) {
       const printWindow = window.open('', '_blank');
       printWindow.document.write(html);
       printWindow.document.close();
-      
+
       printWindow.onload = function() {
         printWindow.print();
         printWindow.close();
@@ -391,4 +391,51 @@ function printInvoice(orderId) {
       alert('Có lỗi xảy ra khi in hóa đơn');
     });
 }
+
+  document.addEventListener("turbo:load", function() {
+    const laundryType = "<%= @order.laundry_type %>";
+    const weightInput = document.getElementById("weight");
+    const totalAmountInput = document.getElementById("total_amount");
+
+    weightInput.addEventListener("input", function() {
+      const weight = parseFloat(weightInput.value);
+      if (isNaN(weight) || weight <= 0) {
+        totalAmountInput.value = "";
+        return;
+      }
+
+      let price = 0;
+
+      switch (laundryType) {
+        case "clothes":
+          price = weight < 2.2 ? 30000 : weight * 13000;
+          break;
+        case "blanket":
+          price = weight < 1.5 ? 30000 : weight * 20000;
+          break;
+        case "topper":
+          price = weight * 30000;
+          break;
+        case "wet_dry":
+          price = weight <= 4 ? 30000 : weight * 8000;
+          break;
+        case "curtain":
+          price = weight * 20000;
+          break;
+        case "vest":
+          price = weight * 60000; // mỗi cái
+          break;
+        case "shoes":
+          price = weight * 50000; // mỗi đôi
+          break;
+        case "bleach_clothes":
+          price = weight * 50000; // mỗi cái
+          break;
+        default:
+          price = 0;
+      }
+
+      totalAmountInput.value = Math.round(price);
+    });
+  });
 </script>

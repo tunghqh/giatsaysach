@@ -17,11 +17,15 @@ class Order < ApplicationRecord
 
   # Enum for laundry types
   LAUNDRY_TYPES = [
-    ['Dân sinh', 'daily'],
-    ['Đồ tẩy', 'bleach'],
-    ['Chăn', 'blanket'],
-    ['Màn', 'curtain'],
-    ['Khác', 'other']
+    ['QUẦN ÁO', 'clothes'],
+    ['CHĂN MỀN', 'blanket'],
+    ['TOPPER', 'topper'],
+    ['GIẶT ƯỚT/ SẤY KHÔ', 'wet_dry'],
+    ['RÈM', 'curtain'],
+    ['ÁO VEST/ DẠ', 'vest'],
+    ['GIÀY', 'shoes'],
+    ['TẨY QUẦN ÁO', 'bleach_clothes'],
+    ['KHÁC', 'other']
   ].freeze
 
   # Payment methods
