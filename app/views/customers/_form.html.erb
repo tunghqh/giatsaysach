@@ -1,0 +1,13 @@
+<%= form_with(model: @customer, local: true) do |form| %>
+  <div class="field">
+    <%= form.label :name, 'Tên khách hàng' %>
+    <%= form.text_field :name %>
+  </div>
+  <div class="field">
+    <%= form.label :phone, 'Số điện thoại' %>
+    <%= form.text_field :phone %>
+  </div>
+  <div class="actions">
+    <%= form.submit 'Cập nhật' %>
+  </div>
+<% end %>

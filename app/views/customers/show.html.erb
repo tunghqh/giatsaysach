@@ -6,8 +6,11 @@
       <%= link_to customers_path, class: "btn btn-outline-secondary me-2" do %>
         <i class="fas fa-arrow-left me-1"></i>Quay lại
       <% end %>
-      <%= link_to new_order_path(phone: @customer.phone), class: "btn btn-primary" do %>
+      <%= link_to new_order_path(phone: @customer.phone), class: "btn btn-primary me-2" do %>
         <i class="fas fa-plus me-1"></i>Tạo đơn mới
+      <% end %>
+      <%= link_to edit_customer_path(@customer), class: "btn btn-warning" do %>
+        <i class="fas fa-edit me-1"></i>Sửa khách hàng
       <% end %>
     </div>
   </div>

@@ -25,6 +25,7 @@ class Order < ApplicationRecord
     ['ÁO VEST/ DẠ', 'vest'],
     ['GIÀY', 'shoes'],
     ['TẨY QUẦN ÁO', 'bleach_clothes'],
+    ['KHĂN SPA', 'spa_towel'],
     ['KHÁC', 'other']
   ].freeze
 

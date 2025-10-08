@@ -78,7 +78,13 @@ class OrdersController < ApplicationController
   end
 
   def update
+  # Xóa biến không dùng
     if @order.update(order_params)
+      # Nếu tên hoặc số điện thoại thay đổi, cập nhật lại cho customer
+      customer = @order.customer
+      if customer.present? && (customer.name != @order.customer_name || customer.phone != @order.customer_phone)
+        customer.update(name: @order.customer_name, phone: @order.customer_phone)
+      end
       redirect_to @order, notice: 'Đơn hàng đã được cập nhật.'
     else
       render :edit, status: :unprocessable_entity
@@ -151,6 +157,7 @@ class OrdersController < ApplicationController
   end
 
   def print_invoice
+    @unit_price = unit_price(@order.laundry_type)
     unless @order.completed? || @order.paid?
       redirect_to @order, alert: 'Chỉ có thể in hóa đơn cho đơn hàng đã hoàn thành.'
       return
@@ -179,5 +186,26 @@ class OrdersController < ApplicationController
 
   def order_params
     params.require(:order).permit(:customer_name, :customer_phone, :laundry_type, :separate_whites, :weight, :total_amount, :shipping_fee, :extra_fee)
+  end
+
+  def unit_price(laundry_type)
+    case laundry_type
+    when 'clothes'
+      13000
+    when 'blanket', 'curtain'
+      20000
+    when 'topper'
+      30000
+    when 'wet_dry'
+      8000
+    when 'spa_towel'
+      11000
+    when 'vest'
+      60000
+    when 'shoes', 'bleach_clothes'
+      50000
+    else
+      0
+    end
   end
 end

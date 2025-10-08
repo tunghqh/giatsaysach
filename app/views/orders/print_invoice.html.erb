@@ -4,87 +4,128 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body {
-      font-family: 'Times New Roman', serif;
-      margin: 0;
-      padding: 20px;
-      font-size: 14px;
-      line-height: 1.6;
-      color: #333;
-    }
-
-    .invoice-container {
-      max-width: 340px;
-      margin: 0 auto;
-      background: white;
-      padding: 20px;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .logo {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .customer-name {
-      font-size: 16px;
-      font-weight: bold;
-      margin: 10px 0;
-    }
-
-    .order-number {
-      font-size: 24px;
-      font-weight: bold;
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    .service-details {
-      margin: 20px 0;
-      line-height: 1.8;
-    }
-
-    .service-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 5px;
-    }
-
-    .total-amount {
-      font-size: 18px;
-      font-weight: bold;
-      text-align: center;
-      margin: 20px 0;
-      padding: 10px;
-      border: 2px solid #333;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 12px;
-      line-height: 1.4;
-    }
-
-    @media print {
-      body { margin: 0; padding: 10px; }
-      .invoice-container {
-        padding: 10px;
-        max-width: none;
+    * {
+        box-sizing: border-box;
+        -webkit-print-color-adjust: exact;
       }
-    }
+
+      body {
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        color: #000;
+        margin: 0;
+        padding: 0;
+        background: #fff;
+      }
+
+      .invoice-container {
+        width: 72mm; /* chuẩn máy in 80mm */
+        margin: 0 auto;
+        padding: 8px;
+      }
+
+      .center {
+        text-align: center;
+      }
+
+      .header {
+        margin-bottom: 8px;
+        border-bottom: 1px dashed #000;
+        padding-bottom: 5px;
+      }
+
+      .logo {
+        font-size: 16px;
+        margin-bottom: 3px;
+        text-align: center;
+        letter-spacing: 2px;
+      }
+
+      .order-number {
+        font-size: 30px;
+        text-align: center;
+        margin: 8px 0;
+      }
+
+      .customer-name {
+        margin-top: 5px;
+        font-size: 12px;
+      }
+
+      .service-details {
+        margin-top: 8px;
+      }
+
+      .service-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2px;
+      }
+
+      .service-row span:first-child {
+        flex: 1;
+      }
+
+      .service-row span:last-child {
+        flex-shrink: 0;
+        text-align: right;
+      }
+
+      .divider {
+        border-top: 1px dashed #000;
+        margin: 6px 0;
+      }
+
+      .total-amount {
+        text-align: center;
+        font-size: 14px;
+        border-top: 2px solid #000;
+        border-bottom: 2px solid #000;
+        padding: 5px 0;
+        margin: 10px 0;
+      }
+
+      .qr-section {
+        text-align: center;
+        margin: 10px 0;
+      }
+
+      .qr-section img {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        border: 1px solid #ccc;
+        padding: 3px;
+      }
+
+      .footer {
+        text-align: center;
+        border-top: 1px dashed #000;
+        padding-top: 5px;
+        margin-top: 10px;
+        font-size: 11px;
+        line-height: 1.4;
+      }
+
+      @media print {
+        @page {
+          size: 72mm auto;
+          margin: 0;
+        }
+        body {
+          margin: 0;
+        }
+        .invoice-container {
+          padding: 5px;
+        }
+      }
   </style>
 </head>
 <body>
   <div class="invoice-container">
     <!-- Header -->
     <div class="header">
-      <div class="logo">🧺 GIẶT SẤY SẠCH</div>
+      <div class="logo">GIẶT SẤY SẠCH</div>
       <div class="order-number">
         Đơn hàng <%= @order.id %>
       </div>
@@ -95,10 +136,15 @@
     <div class="service-details">
       <div class="service-row">
         <span>Loại giặt:</span>
-        <span><%= @order.laundry_type == 'daily' ? 'Dân sinh' :
-                   @order.laundry_type == 'bleach' ? 'Đồ tẩy' :
-                   @order.laundry_type == 'blanket' ? 'Chăn' :
-                   @order.laundry_type == 'curtain' ? 'Màn' : 'Khác' %></span>
+        <span><%= @order.laundry_type == 'clothes' ? 'QUẦN ÁO' :
+                   @order.laundry_type == 'blanket' ? 'CHĂN MỀN' :
+                    @order.laundry_type == 'topper' ? 'TOPPER' :
+                    @order.laundry_type == 'wet_dry' ? 'GIẶT ƯỚT/ SẤY KHÔ' :
+                    @order.laundry_type == 'curtain' ? 'RÈM' :
+                    @order.laundry_type == 'vest' ? 'ÁO VEST/ DẠ' :
+                    @order.laundry_type == 'shoes' ? 'GIÀY' :
+                    @order.laundry_type == 'spa_towel' ? 'KHĂN SPA' :
+                    @order.laundry_type == 'bleach_clothes' ? 'TẨY QUẦN ÁO' : 'KHÁC' %></span>
       </div>
 
       <div class="service-row">
@@ -141,7 +187,8 @@
     <!-- Footer -->
     <div class="footer">
       <div>Giặt sấy sạch</div>
-      <div><i class="fas fa-map-marker-alt me-2"></i> 99 Phan Thanh, Thanh Khê, Đà Nẵng | <i class="fas fa-phone me-2"></i>0926 805 916</div>
+      <div><i class="fas fa-map-marker-alt me-2"></i> 99 Phan Thanh, Thanh Khê, Đà Nẵng</div>
+      <div><i class="fas fa-phone me-2"></i> 0926 805 916</div>
       <div style="margin-top: 10px; font-weight: bold;">Cảm ơn quý khách!</div>
     </div>
   </div>

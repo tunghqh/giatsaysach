@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get 'home/index'
 
   # Laundry management routes
-  resources :customers, only: [:index, :show]
+  resources :customers, only: [:index, :show, :edit, :update]
   resources :orders do
     member do
       patch :start_washing
