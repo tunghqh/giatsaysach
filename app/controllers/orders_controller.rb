@@ -84,6 +84,7 @@ class OrdersController < ApplicationController
       customer = @order.customer
       if customer.present? && (customer.name != @order.customer_name || customer.phone != @order.customer_phone)
         customer.update(name: @order.customer_name, phone: @order.customer_phone)
+        Order.where(customer_id: customer.id).update_all(customer_name: @order.customer_name, customer_phone: @order.customer_phone)
       end
       redirect_to @order, notice: 'Đơn hàng đã được cập nhật.'
     else
