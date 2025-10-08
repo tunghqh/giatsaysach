@@ -11,11 +11,12 @@
 
       body {
         font-family: 'Courier New', monospace;
-        font-size: 12px;
+        font-size: 14px;
         color: #000;
         margin: 0;
         padding: 0;
         background: #fff;
+        font-weight: 500;
       }
 
       .invoice-container {
@@ -35,31 +36,40 @@
       }
 
       .logo {
-        font-size: 16px;
+        font-size: 18px;
         margin-bottom: 3px;
         text-align: center;
         letter-spacing: 2px;
+        font-weight: bold;
+        color: #000;
       }
 
       .order-number {
-        font-size: 30px;
+        font-size: 32px;
         text-align: center;
         margin: 8px 0;
+        font-weight: bold;
+        color: #000;
       }
 
       .customer-name {
         margin-top: 5px;
-        font-size: 12px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #000;
       }
 
       .service-details {
         margin-top: 8px;
+        color: #000;
       }
 
       .service-row {
         display: flex;
         justify-content: space-between;
         margin-bottom: 2px;
+        font-size: 14px;
+        color: #000;
       }
 
       .service-row span:first-child {
@@ -78,11 +88,13 @@
 
       .total-amount {
         text-align: center;
-        font-size: 14px;
+        font-size: 16px;
         border-top: 2px solid #000;
         border-bottom: 2px solid #000;
         padding: 5px 0;
         margin: 10px 0;
+        font-weight: bold;
+        color: #000;
       }
 
       .qr-section {
@@ -103,8 +115,10 @@
         border-top: 1px dashed #000;
         padding-top: 5px;
         margin-top: 10px;
-        font-size: 11px;
+        font-size: 14px;
         line-height: 1.4;
+        color: #000;
+        font-weight: 500;
       }
 
       @media print {
@@ -114,9 +128,14 @@
         }
         body {
           margin: 0;
+          color: #000;
         }
         .invoice-container {
           padding: 5px;
+        }
+        .logo, .order-number, .customer-name, .service-row, .total-amount, .footer {
+          color: #000 !important;
+          font-weight: bold !important;
         }
       }
   </style>
