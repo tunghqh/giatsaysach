@@ -140,14 +140,17 @@ class OrdersController < ApplicationController
   end
 
   def search_customer
-    if params[:phone].present?
-      @customer = Customer.find_by(phone: params[:phone])
+    # Allow partial phone search. Strip non-digits to match validation on Customer.phone
+    query = params[:phone].to_s.gsub(/\D/, '')
+
+    if query.present? && query.length >= 3
+      customers = Customer.search_by_phone(query).limit(10).select(:id, :name, :phone)
       render json: {
-        found: @customer.present?,
-        customer: @customer ? { name: @customer.name, phone: @customer.phone } : nil
+        found: customers.any?,
+        customers: customers.map { |c| { id: c.id, name: c.name, phone: c.phone } }
       }
     else
-      render json: { found: false, customer: nil }
+      render json: { found: false, customers: [] }
     end
   end
 
