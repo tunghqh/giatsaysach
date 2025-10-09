@@ -396,7 +396,7 @@ function printInvoice(orderId) {
     const laundryType = "<%= @order.laundry_type %>";
     const weightInput = document.getElementById("weight");
     const totalAmountInput = document.getElementById("total_amount");
-
+    if (!weightInput || !totalAmountInput) return;
     weightInput.addEventListener("input", function() {
       const weight = parseFloat(weightInput.value);
       if (isNaN(weight) || weight <= 0) {
@@ -405,13 +405,12 @@ function printInvoice(orderId) {
       }
 
       let price = 0;
-
       switch (laundryType) {
         case "clothes":
-          price = weight < 2.2 ? 30000 : weight * 13000;
+          price = weight <= 2.2 ? 30000 : weight * 13000;
           break;
         case "blanket":
-          price = weight < 1.5 ? 30000 : weight * 20000;
+          price = weight <= 1.5 ? 30000 : weight * 20000;
           break;
         case "topper":
           price = weight * 30000;
@@ -434,6 +433,9 @@ function printInvoice(orderId) {
         case "bleach_clothes":
           price = weight * 50000; // mỗi cái
           break;
+        case "shirt_pants":
+          price = weight * 25000; // mỗi bộ
+           break;
         default:
           price = 0;
       }

@@ -205,6 +205,8 @@ class OrdersController < ApplicationController
       60000
     when 'shoes', 'bleach_clothes'
       50000
+    when 'shirt_pants'
+      25000
     else
       0
     end

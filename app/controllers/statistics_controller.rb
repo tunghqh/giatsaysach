@@ -11,9 +11,9 @@ class StatisticsController < ApplicationController
 
     @total_orders = orders.count
     @paid_orders = paid_orders.count
-    @cash_total = paid_orders.where(payment_method: 'cash').sum(:total_amount)
-    @transfer_total = paid_orders.where(payment_method: 'transfer').sum(:total_amount)
-    @total_paid = paid_orders.sum(:total_amount)
+    @cash_total = paid_orders.where(payment_method: 'cash').sum { |o| o.final_total_amount }
+    @transfer_total = paid_orders.where(payment_method: 'transfer').sum { |o| o.final_total_amount }
+    @total_paid = paid_orders.sum { |o| o.final_total_amount }
   end
 
   private

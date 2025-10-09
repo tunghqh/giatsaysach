@@ -152,7 +152,7 @@
                   <%= order.weight.present? ? "#{order.weight}kg" : "-" %>
                 </td>
                 <td>
-                  <%= order.total_amount.present? ? number_to_currency(order.total_amount, unit: "₫", separator: ",", delimiter: ".") : "-" %>
+                  <%= order.total_amount.present? ? number_to_currency(order.final_total_amount, unit: "₫", separator: ",", delimiter: ".") : "-" %>
                 </td>
                 <td><%= order.created_at.strftime("%d/%m/%Y %H:%M") %></td>
                 <td>

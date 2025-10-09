@@ -168,11 +168,11 @@
 
       <div class="service-row">
         <span>Đơn giá:</span>
-        <span><%= number_to_currency((@order.total_amount / @order.weight).to_i, unit: "đ", delimiter: ".", precision: 0, format: "%n%u") %></span>
+        <span><%= @unit_price %> đ</span>
       </div>
 
       <div class="service-row">
-        <span>Cân nặng:</span>
+        <span>Cân nặng/Số lượng:</span>
         <span><%= @order.weight %> kg</span>
       </div>
 
@@ -200,7 +200,7 @@
     <!-- QR Code for bank transfer -->
     <div style="text-align:center; margin: 16px 0 8px 0;">
       <img src="<%= asset_path('qr_bank.png') %>" alt="QR chuyển khoản" style="width:120px; height:120px; object-fit:contain; border:1px solid #eee; padding:4px; background:#fff;" />
-      <div style="font-size:12px; color:#666; margin-top:4px;">Quét mã để chuyển khoản</div>
+      <div style="font-size:12px; margin-top:4px;">Quét mã để chuyển khoản</div>
     </div>
 
     <!-- Footer -->
