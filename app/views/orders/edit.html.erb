@@ -89,14 +89,9 @@
               <% end %>
 
               <div>
-                <%= link_to @order,
-                    class: "btn btn-danger me-2",
-                    data: {
-                      turbo_method: :delete,
-                      confirm: "Bạn có chắc chắn muốn xóa đơn hàng này?"
-                    } do %>
+                <a href="#" class="btn btn-danger me-2" data-confirm-delete="true" data-delete-url="<%= order_path(@order) %>" data-delete-message="Bạn có chắc chắn muốn xóa đơn hàng này?">
                   <i class="fas fa-trash me-2"></i>Xóa
-                <% end %>
+                </a>
 
                 <%= form.submit "Cập nhật đơn hàng", class: "btn btn-warning" %>
               </div>

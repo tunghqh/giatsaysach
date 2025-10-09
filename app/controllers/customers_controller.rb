@@ -1,11 +1,16 @@
 
 class CustomersController < ApplicationController
+  include Pagy::Backend
   before_action :authenticate_user!
   before_action :set_customer, only: [:show, :edit, :update]
 
   def index
-    @customers = Customer.includes(:orders).order(:name)
-    @customers = @customers.search_by_phone(params[:search]) if params[:search].present?
+    customers = Customer.left_joins(:orders)
+      .select('customers.*, COUNT(orders.id) AS orders_count, MAX(orders.created_at) AS latest_order_created_at')
+      .group('customers.id')
+      .order(:name)
+    customers = customers.search_by_phone(params[:search]) if params[:search].present?
+    @pagy, @customers = pagy(customers)
   end
 
   def show

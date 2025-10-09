@@ -1,10 +1,11 @@
 module ApplicationHelper
+  include Pagy::Frontend
   def number_to_words(number)
     return "không" if number.to_i == 0
-    
+
     # Simplified version for basic number conversion
     number = number.to_i
-    
+
     case
     when number < 1000
       convert_hundreds(number)
@@ -29,23 +30,23 @@ module ApplicationHelper
       "rất lớn"
     end
   end
-  
+
   private
-  
+
   def convert_hundreds(num)
     return "" if num == 0
-    
+
     ones = ["", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"]
     teens = ["mười", "mười một", "mười hai", "mười ba", "mười bốn", "mười lăm", "mười sáu", "mười bảy", "mười tám", "mười chín"]
     tens = ["", "", "hai mười", "ba mười", "bốn mười", "năm mười", "sáu mười", "bảy mười", "tám mười", "chín mười"]
-    
+
     result = ""
-    
+
     if num >= 100
       result += ones[num / 100] + " trăm"
       num %= 100
     end
-    
+
     if num >= 20
       result += " " + tens[num / 10]
       num %= 10
@@ -55,7 +56,7 @@ module ApplicationHelper
     elsif num > 0
       result += " " + ones[num]
     end
-    
+
     result.strip
   end
 end

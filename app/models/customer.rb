@@ -3,7 +3,7 @@ class Customer < ApplicationRecord
 
   validates :name, presence: true
   validates :phone, presence: true, uniqueness: true,
-                   format: { with: /\A[0-9+\-\s()]+\z/, message: "Số điện thoại không hợp lệ" }
+                   format: { with: /\A\d+\z/, message: "Số điện thoại chỉ được chứa số" }
 
   scope :search_by_phone, ->(phone) { where("phone LIKE ?", "%#{phone}%") }
 end

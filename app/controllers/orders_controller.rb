@@ -1,33 +1,26 @@
 class OrdersController < ApplicationController
+  include Pagy::Backend
   before_action :authenticate_user!
   before_action :set_order, only: [:show, :edit, :update, :destroy, :start_washing, :complete_washing, :make_payment, :print_invoice]
   before_action :check_admin_permission, only: [:edit, :update, :destroy]
 
   def index
-    @orders = Order.includes(:customer).recent
-
-    # Filter by status
-    @orders = @orders.by_status(params[:status]) if params[:status].present?
-
-    # Search by phone or customer name
-    @orders = @orders.search_by_customer(params[:search].strip) if params[:search].present?
-
-
-    # Filter by date type (created_at or paid_at)
+    orders = Order.includes(:customer).recent
+    orders = orders.by_status(params[:status]) if params[:status].present?
+    orders = orders.search_by_customer(params[:search].strip) if params[:search].present?
     if params[:date].present?
       begin
         date = Date.parse(params[:date])
         if params[:date_type] == 'paid_at'
-          @orders = @orders.paid_on_date(date)
+          orders = orders.paid_on_date(date)
         else
-          @orders = @orders.created_on_date(date)
+          orders = orders.created_on_date(date)
         end
       rescue ArgumentError
         # Invalid date format, ignore filter
       end
     end
-
-    # Store search params for view
+    @pagy, @orders = pagy(orders)
     @search_params = {
       search: params[:search],
       status: params[:status],
@@ -64,9 +57,10 @@ class OrdersController < ApplicationController
 
     @order.customer = @customer
 
-    if @order.save
+    if @customer.valid? && @order.save
       redirect_to @order, notice: 'Đơn hàng đã được tạo thành công.'
     else
+      flash.now[:alert] = 'Tạo đơn hàng không thành công, vui lòng liên hệ quản trị viên'
       render :new, status: :unprocessable_entity
     end
   end

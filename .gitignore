@@ -90,6 +90,9 @@ Thumbs.db
 # Ignore bootsnap cache
 /tmp/cache/bootsnap*
 
+# Ignore toàn bộ thư mục tmp/cache
+/tmp/cache/
+
 # Ignore storage uploads
 /storage/
 

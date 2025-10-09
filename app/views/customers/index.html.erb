@@ -44,11 +44,11 @@
                 <td><%= customer.name %></td>
                 <td><%= customer.phone %></td>
                 <td>
-                  <span class="badge bg-primary"><%= customer.orders.count %></span>
+                  <span class="badge bg-primary"><%= customer.orders_count %></span>
                 </td>
                 <td>
-                  <% if customer.orders.any? %>
-                    <%= customer.orders.first.created_at.strftime("%d/%m/%Y") %>
+                  <% if customer.orders_count.to_i > 0 && customer.latest_order_created_at.present? %>
+                    <%= customer.latest_order_created_at.strftime("%d/%m/%Y") %>
                   <% else %>
                     <span class="text-muted">Chưa có</span>
                   <% end %>
@@ -68,6 +68,9 @@
             <% end %>
           </tbody>
         </table>
+          <div class="d-flex justify-content-center my-3">
+            <%= raw(pagy_bootstrap_nav(@pagy)) if @pagy %>
+          </div>
 
         <% if @customers.empty? %>
           <div class="text-center py-5">

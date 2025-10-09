@@ -1,0 +1,41 @@
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Xác nhận xóa</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p id="delete-confirm-message">Bạn có chắc chắn muốn xóa?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <form id="delete-confirm-form" method="post" action="">
+          <input type="hidden" name="_method" value="delete" />
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+          <button type="submit" class="btn btn-danger">Xóa</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var deleteModal = document.getElementById('deleteConfirmModal')
+  if (!deleteModal) return
+
+  document.querySelectorAll('[data-confirm-delete]').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault()
+      var url = btn.getAttribute('data-delete-url') || btn.href
+      var message = btn.getAttribute('data-delete-message') || 'Bạn có chắc chắn muốn xóa?'
+      document.getElementById('delete-confirm-message').textContent = message
+      var form = document.getElementById('delete-confirm-form')
+      form.action = url
+      var modal = new bootstrap.Modal(deleteModal)
+      modal.show()
+    })
+  })
+})
+</script>

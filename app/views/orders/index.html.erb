@@ -166,13 +166,9 @@
                       <% end %>
                     <% end %>
                     <% if current_user.can_delete_orders? %>
-                      <%= link_to order_path(order), class: "btn btn-sm btn-outline-danger",
-                          data: {
-                            turbo_method: :delete,
-                            confirm: "Bạn có chắc chắn muốn xóa đơn hàng ##{order.id}?"
-                          } do %>
+                      <a href="#" class="btn btn-sm btn-outline-danger" data-confirm-delete="true" data-delete-url="<%= order_path(order) %>" data-delete-message="Bạn có chắc chắn muốn xóa đơn hàng?">
                         <i class="fas fa-trash"></i>
-                      <% end %>
+                      </a>
                     <% end %>
                   </div>
                 </td>
@@ -180,6 +176,9 @@
             <% end %>
           </tbody>
         </table>
+          <div class="d-flex justify-content-center my-3">
+            <%= raw(pagy_bootstrap_nav(@pagy)) if @pagy %>
+          </div>
 
         <% if @orders.empty? %>
           <div class="text-center py-5">
