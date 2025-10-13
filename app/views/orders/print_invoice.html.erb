@@ -115,7 +115,7 @@
         border-top: 1px dashed #000;
         padding-top: 5px;
         margin-top: 10px;
-        font-size: 14px;
+        font-size: 12px;
         line-height: 1.4;
         color: #000;
         font-weight: 500;
@@ -167,13 +167,13 @@
       </div>
 
       <div class="service-row">
-        <span>Đơn giá:</span>
-        <span><%= @unit_price %> đ</span>
+        <span>Cân nặng/Số lượng:</span>
+        <span><%= @order.weight %> kg</span>
       </div>
 
       <div class="service-row">
-        <span>Cân nặng/Số lượng:</span>
-        <span><%= @order.weight %> kg</span>
+        <span>Đơn giá:</span>
+        <span><%= unit_price_special(@order.laundry_type, @order.weight, @order.total_amount) %></span>
       </div>
 
       <div class="service-row">
@@ -208,7 +208,7 @@
       <div>Giặt sấy sạch</div>
       <div><i class="fas fa-map-marker-alt me-2"></i> 99 Phan Thanh, Thanh Khê, Đà Nẵng</div>
       <div><i class="fas fa-phone me-2"></i> 0926 805 916</div>
-      <div style="margin-top: 10px; font-weight: bold;">Cảm ơn quý khách!</div>
+      <div style="margin-top: 10px; font-weight: bold; font-size: 14px;">Cảm ơn quý khách!</div>
     </div>
   </div>
 </body>

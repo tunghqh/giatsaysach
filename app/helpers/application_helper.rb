@@ -31,6 +31,18 @@ module ApplicationHelper
     end
   end
 
+  def unit_price_special(laundry_type, weight, total_amount)
+    if (laundry_type == 'clothes' && weight <= 2.2)
+      '(< 2.2kg/30.000đ)'
+    elsif laundry_type == 'blanket' && weight <= 1.5
+      '(< 1.5kg/30.000đ)'
+    elsif laundry_type == 'wet_dry' && weight <= 4
+      '(< 4kg/30.000đ)'
+    else
+      unit_price(laundry_type, weight, total_amount)
+    end
+  end
+
   private
 
   def convert_hundreds(num)
@@ -58,5 +70,28 @@ module ApplicationHelper
     end
 
     result.strip
+  end
+
+  def unit_price(laundry_type, weight, total_amount)
+    case laundry_type
+    when 'clothes'
+      '13.000đ'
+    when 'blanket', 'curtain'
+      '20.000đ'
+    when 'topper'
+      '30.000đ'
+    when 'wet_dry'
+      '8.000đ'
+    when 'spa_towel'
+      '11.000đ'
+    when 'vest'
+      '60.000đ'
+    when 'shoes', 'bleach_clothes'
+      '50.000đ'
+    when 'shirt_pants'
+      '25.000đ'
+    else
+      number_to_currency((total_amount / weight).round, unit: "đ", delimiter: ".", precision: 0, format: "%n%u")
+    end
   end
 end

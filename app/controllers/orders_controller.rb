@@ -155,7 +155,6 @@ class OrdersController < ApplicationController
   end
 
   def print_invoice
-    @unit_price = unit_price(@order.laundry_type)
     unless @order.completed? || @order.paid?
       redirect_to @order, alert: 'Chỉ có thể in hóa đơn cho đơn hàng đã hoàn thành.'
       return
@@ -184,28 +183,5 @@ class OrdersController < ApplicationController
 
   def order_params
     params.require(:order).permit(:customer_name, :customer_phone, :laundry_type, :separate_whites, :weight, :total_amount, :shipping_fee, :extra_fee)
-  end
-
-  def unit_price(laundry_type)
-    case laundry_type
-    when 'clothes'
-      13000
-    when 'blanket', 'curtain'
-      20000
-    when 'topper'
-      30000
-    when 'wet_dry'
-      8000
-    when 'spa_towel'
-      11000
-    when 'vest'
-      60000
-    when 'shoes', 'bleach_clothes'
-      50000
-    when 'shirt_pants'
-      25000
-    else
-      0
-    end
   end
 end
