@@ -197,9 +197,12 @@
       Tổng cộng: <%= number_to_currency((@order.final_total_amount).to_i, unit: "đ", delimiter: ".", precision: 0, format: "%n%u") %>
     </div>
 
-    <!-- QR Code for bank transfer -->
+    <!-- QR Code for VPBank transfer (VietQR) -->
     <div style="text-align:center; margin: 16px 0 8px 0;">
-      <img src="<%= asset_path('qr_bank.png') %>" alt="QR chuyển khoản" style="width:120px; height:120px; object-fit:contain; border:1px solid #eee; padding:4px; background:#fff;" />
+      <%# Số tài khoản VPBank %>
+      <% account_number = '0363324152' %>
+      <% qr_url = vietqr_payload_vpbank(account_number: account_number, amount: @order.final_total_amount.to_i, add_info: "Giặt sấy sạch - #{@order.id}") %>
+      <img src="<%= qr_url %>" alt="QR chuyển khoản VPBank" style="width:120px; height:120px; object-fit:contain; border:1px solid #eee; padding:4px; background:#fff;" />
       <div style="font-size:12px; margin-top:4px;">Quét mã để chuyển khoản</div>
     </div>
 

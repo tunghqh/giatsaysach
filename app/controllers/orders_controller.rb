@@ -1,5 +1,6 @@
 class OrdersController < ApplicationController
   include Pagy::Backend
+  include QrHelper
   before_action :authenticate_user!
   before_action :set_order, only: [:show, :edit, :update, :destroy, :start_washing, :complete_washing, :make_payment, :print_invoice]
   before_action :check_admin_permission, only: [:edit, :update, :destroy]
