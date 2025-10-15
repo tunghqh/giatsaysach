@@ -5,5 +5,5 @@ class Customer < ApplicationRecord
   validates :phone, presence: true, uniqueness: true,
                    format: { with: /\A\d+\z/, message: "Số điện thoại chỉ được chứa số" }
 
-  scope :search_by_phone, ->(phone) { where("phone LIKE ?", "%#{phone}%") }
+  scope :search_by_phone, ->(phone) { where("phone LIKE ? OR name LIKE ?", "%#{phone}%", "%#{phone}%") }
 end
