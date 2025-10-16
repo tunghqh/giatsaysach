@@ -43,6 +43,10 @@ module ApplicationHelper
     end
   end
 
+  def total_amount(orders)
+    orders.sum(:total_amount) + orders.sum(:extra_fee) + orders.sum(:shipping_fee)
+  end
+
   private
 
   def convert_hundreds(num)

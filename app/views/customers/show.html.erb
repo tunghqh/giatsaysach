@@ -63,9 +63,15 @@
             <span class="badge bg-success"><%= @customer.orders.completed.count %></span>
           </div>
           <div class="mb-3">
-            <strong>Tổng doanh thu:</strong>
+            <strong>Tổng doanh thu chưa thanh toán:</strong>
             <p class="mb-1 text-success">
-              <%= number_to_currency(@customer.orders.completed.sum(:total_amount), unit: "₫", separator: ",", delimiter: ".") %>
+              <%= number_to_currency(total_amount(@customer.orders.completed), unit: "₫", separator: ",", delimiter: ".") %>
+            </p>
+          </div>
+          <div class="mb-3">
+            <strong>Tổng doanh thu đã thanh toán:</strong>
+            <p class="mb-1 text-success">
+              <%= number_to_currency(total_amount(@customer.orders.paid), unit: "₫", separator: ",", delimiter: ".") %>
             </p>
           </div>
         </div>
@@ -88,6 +94,7 @@
                     <th>Loại giặt</th>
                     <th>Trạng thái</th>
                     <th>Cân nặng</th>
+                    <th>Thành tiền</th>
                     <th>Tổng tiền</th>
                     <th>Ngày tạo</th>
                     <th>Thao tác</th>
@@ -113,6 +120,9 @@
                       </td>
                       <td>
                         <%= order.total_amount.present? ? number_to_currency(order.total_amount, unit: "₫", separator: ",", delimiter: ".") : "-" %>
+                      </td>
+                      <td>
+                        <%= order.total_amount.present? ? number_to_currency(order.final_total_amount, unit: "₫", separator: ",", delimiter: ".") : "-" %>
                       </td>
                       <td><%= order.created_at.strftime("%d/%m") %></td>
                       <td>
