@@ -1,0 +1,31 @@
+<div class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Kết ca: <%= @shift.user.email %></h5>
+        </div>
+        <div class="card-body">
+          <p>Bắt đầu: <strong><%= @shift.start_time.strftime('%d/%m/%Y %H:%M') %></strong></p>
+
+          <%= form_with model: @shift, url: shift_path(@shift), method: :patch, local: true do |f| %>
+            <div class="mb-3">
+              <label class="form-label">Số tiền hiện tại trong két (₫)</label>
+              <%= f.number_field :end_cash, class: 'form-control', min: 0, required: true %>
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <%= f.submit 'Kết ca', class: 'btn btn-danger' %>
+              <%= link_to 'Hủy', shifts_path, class: 'btn btn-secondary' %>
+            </div>
+          <% end %>
+
+          <% if @shift.total_paid.present? && @shift.end_time.present? %>
+            <hr>
+            <h5>Kết quả</h5>
+            <p>Tổng tiền các đơn đã thanh toán trong ca: <strong><%= number_to_currency(@shift.total_paid, unit: '₫', separator: ',', delimiter: '.') %></strong></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -248,7 +248,7 @@
                     <i class="fas fa-play me-2"></i>Bắt đầu giặt
                   <% end %>
                 <% elsif @order.washing? %>
-                  <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#completeModal">
+                  <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#completeModal" data-separate-whites="<%= @order.separate_whites? %>">
                     <i class="fas fa-check me-2"></i>Hoàn thành giặt
                   </button>
                 <% elsif @order.completed? %>
@@ -329,7 +329,7 @@
             <div class="mb-3">
               <strong>Tổng tiền cần thanh toán:</strong>
               <p class="h4 text-primary">
-                <%= number_to_currency(@order.total_amount, unit: "₫", separator: ",", delimiter: ".") %>
+                <%= number_to_currency(@order.final_total_amount, unit: "₫", separator: ",", delimiter: ".") %>
               </p>
             </div>
             <div class="mb-3">
@@ -438,5 +438,24 @@ function printInvoice(orderId) {
 
       totalAmountInput.value = Math.round(price);
     });
+
+    // When the complete washing modal is shown, if the triggering button indicates separate whites,
+    // prefill the extra_fee input with 5000
+    var completeModal = document.getElementById('completeModal');
+    if (completeModal) {
+      completeModal.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        var button = event.relatedTarget;
+        if (!button) return;
+        var separate = button.getAttribute('data-separate-whites');
+        // Rails renders true/false as strings; check for 'true' or true
+        if (separate === 'true' || separate === true) {
+          var extraFeeInput = document.getElementById('extra_fee');
+          if (extraFeeInput && (extraFeeInput.value === '' || parseInt(extraFeeInput.value) === 0)) {
+            extraFeeInput.value = 5000;
+          }
+        }
+      });
+    }
   });
 </script>

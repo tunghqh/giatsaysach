@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_06_120000) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_21_123000) do
   create_table "customers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "phone", null: false
@@ -44,6 +44,20 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_06_120000) do
     t.index ["status"], name: "index_orders_on_status"
   end
 
+  create_table "shifts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "start_time", null: false
+    t.datetime "end_time"
+    t.integer "start_cash", default: 0, null: false
+    t.integer "end_cash"
+    t.integer "total_paid", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "staff_name"
+    t.index ["staff_name"], name: "index_shifts_on_staff_name"
+    t.index ["user_id"], name: "index_shifts_on_user_id"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -59,4 +73,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_06_120000) do
   end
 
   add_foreign_key "orders", "customers"
+  add_foreign_key "shifts", "users"
 end

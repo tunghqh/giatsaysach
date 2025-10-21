@@ -1,0 +1,79 @@
+<div class="container my-4">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Bắt đầu ca</h5>
+        </div>
+        <div class="card-body">
+          <% if @open_shift.present? %>
+            <p>Đang mở ca cho <strong><%= @open_shift.staff_name %></strong> bắt từ <strong><%= @open_shift.start_time.strftime('%d/%m/%Y %H:%M') %></strong></p>
+            <%= link_to 'Kết ca', edit_shift_path(@open_shift), class: 'btn btn-danger btn-lg' %>
+          <% else %>
+            <%= form_with model: @shift, url: shifts_path, local: true do |f| %>
+              <div class="mb-3" style="display: none;">
+                <label class="form-label">Nhân viên</label>
+                <select class="form-select" name="shift[staff_name]" required>
+                  <% @staff_names.each do |name| %>
+                    <option value="<%= name %>" <%= 'selected' if name == @selected_staff %>><%= name %></option>
+                  <% end %>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Số tiền hiện tại trong két (₫)</label>
+                <%= f.number_field :start_cash, class: 'form-control', min: 1000, value: 0, required: true %>
+              </div>
+              <div class="d-grid">
+                <%= f.submit 'Bắt đầu ca', class: 'btn btn-success' %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Các ca gần đây của <%= @selected_staff %></h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <%= form_with url: shifts_path, method: :get, local: true do |ff| %>
+              <div class="input-group">
+                <select class="form-select" name="staff_name">
+                  <% @staff_names.each do |name| %>
+                    <option value="<%= name %>" <%= 'selected' if name == @selected_staff %>><%= name %></option>
+                  <% end %>
+                </select>
+                <button class="btn btn-outline-primary" type="submit">Xem</button>
+              </div>
+            <% end %>
+          </div>
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Ngày</th>
+                <th>Bắt đầu</th>
+                <th>Kết thúc</th>
+                <th>Tổng thu</th>
+                <th>Chênh lệch</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @shifts.each do |s| %>
+                <tr>
+                  <td><%= s.created_at.strftime('%d/%m/%Y') %></td>
+                  <td><%= s.start_time.strftime('%H:%M') %></td>
+                  <td><%= s.end_time ? s.end_time.strftime('%H:%M') : '-' %></td>
+                  <td><%= number_to_currency(s.total_paid || 0, unit: '₫', separator: ',', delimiter: '.') %></td>
+                  <td><%= number_to_currency(s.end_cash - (s.total_paid + s.start_cash), unit: '₫', separator: ',', delimiter: '.') if s.end_cash && s.start_cash %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
