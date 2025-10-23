@@ -334,7 +334,7 @@
             </div>
             <div class="mb-3">
               <div class="d-flex justify-content-center mb-3">
-                <% account_number = '0363324152' %>
+                <% account_number = '3363324152' %>
                 <% qr_url = vietqr_payload_vpbank(account_number: account_number, amount: @order.final_total_amount.to_i, add_info: "Giặt sấy sạch - #{@order.id}") %>
                 <img src="<%= qr_url %>" alt="QR chuyển khoản VPBank" style="width:120px; height:120px; object-fit:contain; border:1px solid #eee; padding:4px; background:#fff;" />
               </div>

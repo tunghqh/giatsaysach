@@ -39,14 +39,13 @@
         </div>
         <div class="card-body">
           <div class="mb-3">
-            <%= form_with url: shifts_path, method: :get, local: true do |ff| %>
+            <%= form_with url: shifts_path, method: :get, local: true, html: { id: 'staff-filter-form' } do |ff| %>
               <div class="input-group">
-                <select class="form-select" name="staff_name">
+                <select class="form-select" name="staff_name" onchange="document.getElementById('staff-filter-form').submit()">
                   <% @staff_names.each do |name| %>
                     <option value="<%= name %>" <%= 'selected' if name == @selected_staff %>><%= name %></option>
                   <% end %>
                 </select>
-                <button class="btn btn-outline-primary" type="submit">Xem</button>
               </div>
             <% end %>
           </div>
