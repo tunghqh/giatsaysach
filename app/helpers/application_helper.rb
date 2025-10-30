@@ -32,8 +32,8 @@ module ApplicationHelper
   end
 
   def unit_price_special(laundry_type, weight, total_amount)
-    if (laundry_type == 'clothes' && weight <= 2.2)
-      '(< 2.2kg/30.000đ)'
+    if (laundry_type == 'clothes' && weight <= 2.3)
+      '(< 2.3kg/30.000đ)'
     elsif laundry_type == 'blanket' && weight <= 1.5
       '(< 1.5kg/30.000đ)'
     elsif laundry_type == 'wet_dry' && weight <= 4

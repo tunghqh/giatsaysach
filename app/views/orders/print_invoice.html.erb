@@ -197,22 +197,28 @@
       Tổng cộng: <%= number_to_currency((@order.final_total_amount).to_i, unit: "đ", delimiter: ".", precision: 0, format: "%n%u") %>
     </div>
 
-    <!-- QR Code for VPBank transfer (VietQR) -->
-    <div style="text-align:center; margin: 16px 0 8px 0;">
-      <%# Số tài khoản VPBank %>
-      <% account_number = '3363324152' %>
-      <% qr_url = vietqr_payload_vpbank(account_number: account_number, amount: @order.final_total_amount.to_i, add_info: "Giặt sấy sạch - #{@order.id}") %>
-      <img src="<%= qr_url %>" alt="QR chuyển khoản VPBank" style="width:120px; height:120px; object-fit:contain; border:1px solid #eee; padding:4px; background:#fff;" />
-      <div style="font-size:12px; margin-top:4px;">Quét mã để chuyển khoản</div>
-    </div>
+      <!-- QR Codes Row -->
+      <div style="display: flex; justify-content: center; gap: 24px; margin: 16px 0 8px 0; align-items: flex-start;">
+        <div style="text-align:center;">
+          <!-- QR Code for VPBank transfer (VietQR) -->
+          <% account_number = '3363324152' %>
+          <% qr_url = vietqr_payload_vpbank(account_number: account_number, amount: @order.final_total_amount.to_i, add_info: "Giặt sấy sạch - #{@order.id}") %>
+          <img src="<%= qr_url %>" alt="QR chuyển khoản VPBank" style="width:120px; height:120px; object-fit:contain; border:1px solid #eee; padding:4px; background:#fff;" />
+          <div style="font-size:12px; margin-top:4px;">Quét để chuyển khoản nha</div>
+        </div>
+        <div style="text-align:center;">
+          <img src="<%= asset_path('qr_map.png') %>" alt="Bản đồ QR" style="width:120px; height:120px; object-fit:contain; border:1px solid #eee; padding:4px; background:#fff;" />
+          <div style="font-size:12px; margin-top:4px;">Đồ sạch rồi, quét review nha</div>
+        </div>
+      </div>
 
     <!-- Footer -->
-    <div class="footer">
-      <div>Giặt sấy sạch</div>
-      <div><i class="fas fa-map-marker-alt me-2"></i> 99 Phan Thanh, Thanh Khê, Đà Nẵng</div>
-      <div><i class="fas fa-phone me-2"></i> 0926 805 916</div>
-      <div style="margin-top: 10px; font-weight: bold; font-size: 14px;">Cảm ơn quý khách!</div>
-    </div>
+      <div class="footer">
+        <div>Giặt sấy sạch</div>
+        <div><i class="fas fa-map-marker-alt me-2"></i> 99 Phan Thanh, Thanh Khê, Đà Nẵng</div>
+        <div><i class="fas fa-phone me-2"></i> 0926 805 916</div>
+        <div style="margin-top: 10px; font-weight: bold; font-size: 14px;">Cảm ơn quý khách!</div>
+      </div>
   </div>
 </body>
 </html>

@@ -408,7 +408,7 @@ function printInvoice(orderId) {
       let price = 0;
       switch (laundryType) {
         case "clothes":
-          price = weight <= 2.2 ? 30000 : weight * 13000;
+          price = weight <= 2.3 ? 30000 : weight * 13000;
           break;
         case "blanket":
           price = weight <= 1.5 ? 30000 : weight * 20000;
