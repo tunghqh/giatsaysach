@@ -1,6 +1,6 @@
 <div class="container my-4">
   <div class="row">
-    <div class="col-md-6">
+  <div class="col-md-4">
       <div class="card mb-4">
         <div class="card-header bg-primary text-white">
           <h5 class="mb-0">Bắt đầu ca</h5>
@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div class="col-md-6">
+  <div class="col-md-8">
       <div class="card mb-4">
         <div class="card-header bg-light">
           <h5 class="mb-0">Các ca gần đây của <%= @selected_staff %></h5>
@@ -55,6 +55,8 @@
                 <th>Ngày</th>
                 <th>Bắt đầu</th>
                 <th>Kết thúc</th>
+                <th>Số tiền bắt đầu</th>
+                <th>Số tiền kết thúc</th>
                 <th>Tổng thu</th>
                 <th>Chênh lệch</th>
               </tr>
@@ -65,6 +67,8 @@
                   <td><%= s.created_at.strftime('%d/%m/%Y') %></td>
                   <td><%= s.start_time.strftime('%H:%M') %></td>
                   <td><%= s.end_time ? s.end_time.strftime('%H:%M') : '-' %></td>
+                  <td><%= number_to_currency(s.start_cash || 0, unit: '₫', separator: ',', delimiter: '.') %></td>
+                  <td><%= s.end_cash ? number_to_currency(s.end_cash, unit: '₫', separator: ',', delimiter: '.') : '-' %></td>
                   <td><%= number_to_currency(s.total_paid || 0, unit: '₫', separator: ',', delimiter: '.') %></td>
                   <td><%= number_to_currency(s.end_cash - (s.total_paid + s.start_cash), unit: '₫', separator: ',', delimiter: '.') if s.end_cash && s.start_cash %></td>
                 </tr>
