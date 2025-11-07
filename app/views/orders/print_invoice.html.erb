@@ -149,6 +149,9 @@
         Đơn hàng <%= @order.id %>
       </div>
       <div class="customer-name"><%= @order.customer.name %> - <%= @order.customer.phone %></div>
+      <div class="customer-name" style="font-size:13px; font-weight:normal; margin-top:2px;">
+        Điểm hiện có: <strong><%= number_with_delimiter(@order.customer.points) %></strong>
+      </div>
     </div>
 
     <!-- Service Details -->

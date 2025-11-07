@@ -1,4 +1,5 @@
 class Order < ApplicationRecord
+  after_update :add_points_to_customer_if_completed
   belongs_to :customer
 
   # Enum for status
@@ -88,7 +89,36 @@ class Order < ApplicationRecord
 
   # Calculate final total amount including fees
   def final_total_amount
-    total_amount + shipping_fee + extra_fee
+    (total_amount || 0) + (shipping_fee || 0) + (extra_fee || 0)
+  end
+
+  # Chỉ cộng điểm khi đơn hàng chuyển sang trạng thái 'completed' (và trước đó chưa phải 'completed')
+  def add_points_to_customer_if_completed
+    return unless saved_change_to_status? && completed? && status_before_last_save != 'completed' && customer.present?
+
+    # Tính điểm cơ bản: 2% giá trị đơn hàng
+    base_points = ((total_amount + extra_fee) * 0.02).to_i
+
+    # Nếu đơn tạo vào thứ 3, x2 điểm
+    if created_at&.tuesday?
+      base_points *= 2
+    end
+
+  # Tổng chi tiêu trước đơn này
+  previous_total = customer.orders.where('created_at < ?', created_at).sum('total_amount + extra_fee')
+  # Tổng chi tiêu sau đơn này
+  new_total = previous_total + (total_amount + extra_fee)
+
+    # Tìm các mốc thưởng đã đạt trước và sau đơn này
+    prev_milestone = (previous_total / 200_000).floor
+    new_milestone = (new_total / 200_000).floor
+    bonus_milestones = new_milestone - prev_milestone
+    bonus_points = bonus_milestones * 500
+
+    total_points = base_points + bonus_points
+    if total_points > 0
+      customer.increment!(:points, total_points)
+    end
   end
 
   # Calculate subtotal (before fees)
