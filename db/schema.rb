@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_21_123000) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_07_010000) do
   create_table "customers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "phone", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "points", default: 0, null: false
     t.index ["phone"], name: "index_customers_on_phone", unique: true
   end
 
@@ -38,6 +39,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_21_123000) do
     t.datetime "paid_at"
     t.decimal "shipping_fee", precision: 10, scale: 2, default: "0.0"
     t.decimal "extra_fee", precision: 10, scale: 2, default: "0.0"
+    t.integer "redeemed_points", default: 0, null: false
     t.index ["customer_id"], name: "index_orders_on_customer_id"
     t.index ["customer_phone"], name: "index_orders_on_customer_phone"
     t.index ["payment_status"], name: "index_orders_on_payment_status"

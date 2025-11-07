@@ -104,6 +104,7 @@
               <th>Thanh toán</th>
               <th>Cân nặng</th>
               <th>Tổng tiền</th>
+              <th>Điểm đã trừ</th>
               <th>Ngày tạo</th>
               <th>Thao tác</th>
             </tr>
@@ -153,6 +154,13 @@
                 </td>
                 <td>
                   <%= order.total_amount.present? ? number_to_currency(order.final_total_amount, unit: "₫", separator: ",", delimiter: ".") : "-" %>
+                </td>
+                <td>
+                  <% if order.redeemed_points && order.redeemed_points > 0 %>
+                    <span class="badge bg-warning text-dark"><%= number_with_delimiter(order.redeemed_points) %></span>
+                  <% else %>
+                    -
+                  <% end %>
                 </td>
                 <td><%= order.created_at.strftime("%d/%m/%Y %H:%M") %></td>
                 <td>

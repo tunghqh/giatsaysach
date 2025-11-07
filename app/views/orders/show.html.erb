@@ -47,6 +47,20 @@
                   <strong>Loại giặt:</strong>
                   <p class="mb-1"><%= @order.laundry_type_text %></p>
                 </div>
+                <% if @order.redeemed_points && @order.redeemed_points > 0 && @order.paid? %>
+                 <div class="mb-3">
+                   <strong>Điểm đã sử dụng:</strong>
+                   <span class="badge bg-warning text-dark"><%= number_with_delimiter(@order.redeemed_points) %> điểm</span>
+                 </div>
+                 <div class="mb-3">
+                   <strong>Số tiền đã trừ điểm:</strong>
+                   <span class="text-danger fw-bold"><%= number_to_currency(@order.redeemed_points, unit: "₫", separator: ",", delimiter: ".") %></span>
+                 </div>
+                 <div class="mb-3">
+                   <strong>Số tiền phải trả sau khi trừ điểm:</strong>
+                   <span class="text-primary fw-bold"><%= number_to_currency(@order.final_total_amount - @order.redeemed_points, unit: "₫", separator: ",", delimiter: ".") %></span>
+                 </div>
+                <% end %>
                 <div class="col-md-6 mb-3">
                   <strong>Giặt đồ trắng riêng:</strong>
                   <p class="mb-1">
@@ -286,6 +300,11 @@
         </div>
         <%= form_with url: complete_washing_order_path(@order), method: :patch, local: true do |form| %>
           <div class="modal-body">
+            <% customer_points = @order.customer&.points || 0 %>
+            <div class="mb-3">
+              <strong>Điểm tích lũy hiện có:</strong>
+              <span class="badge bg-success fs-5"><i class="fas fa-gift me-1"></i><%= number_with_delimiter(customer_points) %> điểm</span>
+            </div>
             <div class="mb-3">
               <label for="weight" class="form-label">Cân nặng (kg)</label>
               <input type="number" class="form-control" id="weight" name="weight" step="0.1" min="0" required>
@@ -325,12 +344,23 @@
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <%= form_with url: make_payment_order_path(@order), method: :patch, local: true do |form| %>
+          <% customer_points = @order.customer&.points || 0 %>
           <div class="modal-body">
             <div class="mb-3">
               <strong>Tổng tiền cần thanh toán:</strong>
-              <p class="h4 text-primary">
+              <p class="h4 text-primary mb-1" id="original-amount">
                 <%= number_to_currency(@order.final_total_amount, unit: "₫", separator: ",", delimiter: ".") %>
               </p>
+              <div class="mb-2">
+                <label for="redeem_points" class="form-label">Sử dụng điểm để giảm giá (tối đa <%= customer_points %> điểm):</label>
+                <input type="number" class="form-control" id="redeem_points" name="redeemed_points" min="0" max="<%= customer_points %>" value="0" step="1">
+              </div>
+              <div>
+                <strong>Số tiền phải trả sau khi trừ điểm:</strong>
+                <span class="h4 text-danger" id="final-amount">
+                  <%= number_to_currency(@order.final_total_amount, unit: "₫", separator: ",", delimiter: ".") %>
+                </span>
+              </div>
             </div>
             <div class="mb-3">
               <div class="d-flex justify-content-center mb-3">
@@ -374,6 +404,29 @@
 <% end %>
 
 <script>
+document.addEventListener("turbo:load", function() {
+  var paymentModal = document.getElementById("paymentModal");
+  if (paymentModal) {
+    paymentModal.addEventListener('shown.bs.modal', function() {
+      var redeemInput = document.getElementById("redeem_points");
+      var finalAmount = document.getElementById("final-amount");
+      var originalAmount = document.getElementById("original-amount");
+      if (redeemInput && finalAmount && originalAmount) {
+        var original = <%= @order.final_total_amount.to_i %>;
+        var maxPoints = <%= @order.customer&.points || 0 %>;
+        redeemInput.addEventListener("input", function() {
+          var val = parseInt(redeemInput.value) || 0;
+          if (val < 0) val = 0;
+          if (val > maxPoints) val = maxPoints;
+          redeemInput.value = val;
+          var result = original - val;
+          if (result < 0) result = 0;
+          finalAmount.textContent = result.toLocaleString('vi-VN') + ' ₫';
+        });
+      }
+    }, { once: true });
+  }
+});
 function printInvoice(orderId) {
   fetch(`/orders/${orderId}/print_invoice`)
     .then(response => response.text())

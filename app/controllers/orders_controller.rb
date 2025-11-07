@@ -123,11 +123,26 @@ class OrdersController < ApplicationController
   def make_payment
     if @order.completed?
       if params[:payment_method].present?
-        @order.update(
-          status: :paid,
-          payment_status: :payment_completed,
-          payment_method: params[:payment_method]
-        )
+        redeem_points = params[:redeemed_points].to_i
+        customer = @order.customer
+        if redeem_points < 0
+          redeem_points = 0
+        end
+        if customer && redeem_points > customer.points
+          redirect_to @order, alert: 'Số điểm đổi không hợp lệ.' and return
+        end
+        # Trừ điểm khách hàng và lưu vào order
+        Order.transaction do
+          if customer && redeem_points > 0
+            customer.decrement!(:points, redeem_points)
+          end
+          @order.update!(
+            status: :paid,
+            payment_status: :payment_completed,
+            payment_method: params[:payment_method],
+            redeemed_points: redeem_points
+          )
+        end
         redirect_to @order, notice: 'Đã thanh toán thành công.'
       else
         redirect_to @order, alert: 'Vui lòng chọn phương thức thanh toán.'
