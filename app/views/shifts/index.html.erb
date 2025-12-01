@@ -32,6 +32,56 @@
       </div>
     </div>
 
+      <!-- Modal: Shift difference warning -->
+      <div class="modal fade" id="shift-diff-modal" tabindex="-1" aria-labelledby="shiftDiffModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="shiftDiffModalLabel">Cảnh báo chênh lệch kết ca</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <% if flash[:shift_diff_amount] %>
+                <% diff = flash[:shift_diff_amount].to_i %>
+                <% expected = flash[:shift_expected].to_i rescue nil %>
+                <% end_cash = flash[:shift_end_cash].to_i rescue nil %>
+                <p>Phát hiện chênh lệch lớn hơn <strong>10.000₫</strong> khi kết ca. Vui lòng liên hệ Quản lý.</p>
+                <p><strong>Chênh lệch:</strong> <%= number_to_currency(diff, unit: '₫', separator: ',', delimiter: '.') %></p>
+                <p><strong>Số tiền kỳ vọng:</strong> <%= number_to_currency(expected || 0, unit: '₫', separator: ',', delimiter: '.') %></p>
+                <p><strong>Số tiền thực tế trong két:</strong> <%= number_to_currency(end_cash || 0, unit: '₫', separator: ',', delimiter: '.') %></p>
+              <% else %>
+                <p>Có sự khác biệt trong kết ca, Vui lòng liên hệ Quản lý.</p>
+              <% end %>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <% if flash[:show_shift_diff] %>
+        <script>
+          (function() {
+            var attempts = 0;
+            function tryShow() {
+              attempts++;
+              var modalEl = document.getElementById('shift-diff-modal');
+              if (window.bootstrap && modalEl) {
+                var modal = new bootstrap.Modal(modalEl);
+                modal.show();
+              } else if (attempts < 40) { // retry for ~2s
+                setTimeout(tryShow, 50);
+              }
+            }
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', tryShow);
+            } else {
+              tryShow();
+            }
+          })();
+        </script>
+      <% end %>
   <div class="col-md-8">
       <div class="card mb-4">
         <div class="card-header bg-light">
