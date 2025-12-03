@@ -61,15 +61,21 @@
       </div>
 
       <% if flash[:show_shift_diff] %>
+        <audio id="shift-warning-audio" src="<%= asset_path('warning-alarm-loop-1-279206.mp3') %>" preload="auto"></audio>
         <script>
           (function() {
             var attempts = 0;
             function tryShow() {
               attempts++;
               var modalEl = document.getElementById('shift-diff-modal');
+              var audioEl = document.getElementById('shift-warning-audio');
               if (window.bootstrap && modalEl) {
                 var modal = new bootstrap.Modal(modalEl);
                 modal.show();
+                if (audioEl) {
+                  audioEl.currentTime = 0;
+                  audioEl.play();
+                }
               } else if (attempts < 40) { // retry for ~2s
                 setTimeout(tryShow, 50);
               }
