@@ -96,29 +96,15 @@ class Order < ApplicationRecord
   def add_points_to_customer_if_completed
     return unless saved_change_to_status? && completed? && status_before_last_save != 'completed' && customer.present?
 
-    # Tính điểm cơ bản: 2% giá trị đơn hàng
-    base_points = ((total_amount + extra_fee) * 0.02).to_i
+    # Tính điểm cơ bản: 1% giá trị đơn hàng
+    base_points = ((total_amount + extra_fee) * 0.01).to_i
 
     # Nếu đơn tạo vào thứ 3, x2 điểm
     if created_at&.tuesday?
       base_points *= 2
     end
 
-  # Tổng chi tiêu trước đơn này
-  previous_total = customer.orders.where('created_at < ?', created_at).sum('total_amount + extra_fee')
-  # Tổng chi tiêu sau đơn này
-  new_total = previous_total + (total_amount + extra_fee)
-
-    # Tìm các mốc thưởng đã đạt trước và sau đơn này
-    prev_milestone = (previous_total / 200_000).floor
-    new_milestone = (new_total / 200_000).floor
-    bonus_milestones = new_milestone - prev_milestone
-    bonus_points = bonus_milestones * 500
-
-    total_points = base_points + bonus_points
-    if total_points > 0
-      customer.increment!(:points, total_points)
-    end
+    customer.increment!(:points, base_points)
   end
 
   # Calculate subtotal (before fees)
