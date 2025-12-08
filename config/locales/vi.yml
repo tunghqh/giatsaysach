@@ -1,0 +1,49 @@
+vi:
+  customer_intro:
+    hero:
+      title: "Chào mừng đến với Giặt Sấy Sạch!"
+      subtitle: "Welcome to Giặt Sấy Sạch!"
+      lead: "Dịch vụ giặt sấy chuyên nghiệp, nhanh chóng, an toàn cho mọi khách hàng."
+    services:
+      title: "Sản phẩm & Dịch vụ"
+      subtitle: "Products & Services"
+      clothes:
+        title: "Giặt Sấy Quần Áo"
+        subtitle: "Clothes Laundry & Drying"
+        desc: "Giặt sạch, sấy khô, thơm mát, giao nhận tận nơi."
+        desc_en: "Clean, dry, fresh, with door-to-door delivery."
+      bedding:
+        title: "Giặt Chăn Ga Gối"
+        subtitle: "Bedding Laundry"
+        desc: "Chăm sóc đồ dùng gia đình với quy trình chuyên nghiệp."
+        desc_en: "Professional care for your home textiles."
+      office:
+        title: "Giặt Đồ Công Sở"
+        subtitle: "Office Wear Laundry"
+        desc: "Đảm bảo sạch sẽ, giữ form, phù hợp cho dân văn phòng."
+        desc_en: "Clean, well-shaped, perfect for office workers."
+      delivery:
+        title: "Giao Nhận Tận Nơi"
+        subtitle: "Door-to-door Delivery"
+        desc: "Đặt lịch online, giao nhận nhanh chóng, tiết kiệm thời gian."
+        desc_en: "Book online, fast delivery, save your time."
+    commitments:
+      title: "Cam kết về dịch vụ của Giặt Sấy Sạch"
+      items:
+        - icon: "&#xf007;"
+          title: "Giặt riêng từng khách hàng"
+          desc: "Giặt Sấy Sạch Đà Nẵng cam kết giặt riêng quần áo từng khách hàng, không giặt chung với khách hàng khác nên tránh được việc nhầm lẫn, thất lạc quần áo cũng như đảm bảo vệ sinh cho khách hàng."
+        - icon: "&#xf017;"
+          title: "Thời gian giặt ủi nhanh và luôn đúng giờ"
+          desc: "Giặt là, giặt ủi lấy liền tại Đà Nẵng giúp bạn tiết kiệm được thời gian của mình trong việc giặt giũ quần áo"
+        - icon: "&#xf02b;"
+          title: "Giá thành thấp, dịch vụ tốt"
+          desc: "Giặt ủi giá rẻ tại Đà Nẵng với chi phí tiết kiệm chỉ với 13.000đ/kg. Dịch vụ tại Giặt Sấy Sạch Đà Nẵng phù hợp với cả khách hàng địa phương cũng như khách du lịch."
+        - icon: "&#xf00c;"
+          title: "Hoàn lại tiền nếu bạn không hài lòng với dịch vụ"
+          desc: "Giặt Sấy Sạch sẽ hoàn lại 100% số tiền dịch vụ của bạn nếu bạn chưa hài lòng với dịch vụ của chúng tôi."
+    contact:
+      title: "Liên hệ"
+      subtitle: "Contact"
+      hotline: "Hotline: 0363324152"
+      address: "Địa chỉ: 99 Phan Thanh, Thanh Khê, Đà Nẵng"

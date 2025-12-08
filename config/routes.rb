@@ -8,6 +8,9 @@ Rails.application.routes.draw do
 
   # Laundry management routes
   resources :customers, only: [:index, :show, :edit, :update]
+
+  # Trang giới thiệu cho khách hàng
+  get 'intro', to: 'customers#intro', as: :customer_intro
   resources :orders do
     member do
       patch :start_washing

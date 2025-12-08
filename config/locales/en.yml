@@ -29,3 +29,57 @@
 
 en:
   hello: "Hello world"
+
+  customer_intro:
+    hero:
+      title: "Welcome to Giặt Sấy Sạch!"
+      subtitle: "Chào mừng đến với Giặt Sấy Sạch!"
+      lead: "Professional laundry & drying service, fast and safe for every customer."
+    services:
+      title: "Products & Services"
+      subtitle: "Sản phẩm & Dịch vụ"
+      clothes:
+        title: "Clothes Laundry & Drying"
+        subtitle: "Giặt Sấy Quần Áo"
+        desc: "Clean, dry, fresh, with door-to-door delivery."
+        desc_vi: "Giặt sạch, sấy khô, thơm mát, giao nhận tận nơi."
+      bedding:
+        title: "Bedding Laundry"
+        subtitle: "Giặt Chăn Ga Gối"
+        desc: "Professional care for your home textiles."
+        desc_vi: "Chăm sóc đồ dùng gia đình với quy trình chuyên nghiệp."
+      office:
+        title: "Office Wear Laundry"
+        subtitle: "Giặt Đồ Công Sở"
+        desc: "Clean, well-shaped, perfect for office workers."
+        desc_vi: "Đảm bảo sạch sẽ, giữ form, phù hợp cho dân văn phòng."
+      delivery:
+        title: "Door-to-door Delivery"
+        subtitle: "Giao Nhận Tận Nơi"
+        desc: "Book online, fast delivery, save your time."
+        desc_vi: "Đặt lịch online, giao nhận nhanh chóng, tiết kiệm thời gian."
+    commitments:
+      title: "Giatsaysach Service Commitments"
+      items:
+        - icon: "&#xf007;"
+          title: "Individual laundry for each customer"
+          desc: "Giatsaysach Danang commits to washing each customer's clothes separately, not mixing with others to avoid confusion, loss, and ensure hygiene."
+        - icon: "&#xf017;"
+          title: "Fast and always on-time service"
+          desc: "Express laundry service in Danang helps you save time on washing your clothes."
+        - icon: "&#xf02b;"
+          title: "Low cost, good service"
+          desc: "Affordable laundry in Danang with only 13,000đ/kg. Our service suits both local residents and tourists."
+        - icon: "&#xf00c;"
+          title: "Money-back guarantee if not satisfied"
+          desc: "Giatsaysach will refund 100% of your service fee if you are not satisfied with our service."
+      items_vi:
+        - "Máy móc hiện đại, hóa chất an toàn"
+        - "Đội ngũ nhân viên thân thiện, chuyên nghiệp"
+        - "Giá cả minh bạch, hợp lý"
+        - "Hỗ trợ khách hàng tận tâm"
+    contact:
+      title: "Contact"
+      subtitle: "Liên hệ"
+      hotline: "Hotline: 0363324152"
+      address: "Address: 99 Phan Thanh, Thanh Khê, Đà Nẵng"

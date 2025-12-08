@@ -21,10 +21,13 @@ module Login
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-  config.time_zone = "Asia/Ho_Chi_Minh"
-  config.active_record.default_timezone = :local
+    config.time_zone = "Asia/Ho_Chi_Minh"
+    config.active_record.default_timezone = :local
+
+    # Thiết lập mặc định ngôn ngữ là tiếng Việt
+    config.i18n.default_locale = :vi
     # config.eager_load_paths << Rails.root.join("extras")
-    
+
     # Skip database setup during assets precompile
     config.assets.initialize_on_precompile = false if Rails.env.production?
   end

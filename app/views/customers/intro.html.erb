@@ -1,0 +1,208 @@
+<%# app/views/customers/intro.html.erb %>
+
+<div class="customer-intro-page">
+  <div class="lang-switch" style="text-align:right; margin-bottom:16px;">
+    <%= link_to 'Tiếng Việt', url_for(locale: :vi), class: (I18n.locale == :vi ? 'active-lang' : '') %> |
+    <%= link_to 'English', url_for(locale: :en), class: (I18n.locale == :en ? 'active-lang' : '') %>
+  </div>
+  <section class="intro-hero">
+    <h1><%= t('customer_intro.hero.title') %></h1>
+    <p class="lead"><%= t('customer_intro.hero.lead') %></p>
+  </section>
+
+  <section class="services">
+    <h2 style="text-align:center; margin-bottom:24px;"><%= t('customer_intro.services.title') %></h2>
+    <div class="service-list">
+      <div class="service-item">
+        <h3><%= t('customer_intro.services.clothes.title') %></h3>
+        <p><%= t('customer_intro.services.clothes.desc') %></p>
+      </div>
+      <div class="service-item">
+        <h3><%= t('customer_intro.services.bedding.title') %></h3>
+        <p><%= t('customer_intro.services.bedding.desc') %></p>
+      </div>
+      <div class="service-item">
+        <h3><%= t('customer_intro.services.office.title') %></h3>
+        <p><%= t('customer_intro.services.office.desc') %></p>
+      </div>
+      <div class="service-item">
+        <h3><%= t('customer_intro.services.delivery.title') %></h3>
+        <p><%= t('customer_intro.services.delivery.desc') %></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="commitments">
+    <h2 style="text-align:center; margin-bottom:24px;">
+      <%= t('customer_intro.commitments.title') %>
+    </h2>
+    <div class="commitment-list">
+      <% I18n.t('customer_intro.commitments.items').each do |item| %>
+        <div class="commitment-item">
+          <div class="commitment-icon"><%= item[:icon].html_safe %></div>
+          <div>
+            <strong><%= item[:title] %></strong>
+            <p><%= item[:desc] %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="contact">
+    <h2><%= t('customer_intro.contact.title') %></h2>
+    <p><%= t('customer_intro.contact.hotline') %></p>
+    <p><%= t('customer_intro.contact.address') %></p>
+
+    <div class="contact-actions" style="margin-top:20px; display:flex; flex-wrap:wrap; gap:16px; justify-content:center;">
+      <a href="tel:0363324152" class="contact-btn call-btn" title="Gọi ngay">
+        📞 Gọi ngay
+      </a>
+      <a href="https://zalo.me/0363324152" class="contact-btn zalo-btn" target="_blank" rel="noopener" title="Chat Zalo">
+        <img src="https://cocoparty.vn/wp-content/uploads/2021/01/Logo-zalo-png.png" alt="Zalo" style="width:1.2em;vertical-align:middle;"> Zalo
+      </a>
+      <a href="https://wa.me/0363324152" class="contact-btn whatsapp-btn" target="_blank" rel="noopener" title="Chat WhatsApp">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:1.2em;vertical-align:middle;"> WhatsApp
+      </a>
+      <a href="https://m.me/muoiot2806" class="contact-btn messenger-btn" target="_blank" rel="noopener" title="Chat Messenger">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Facebook_Messenger_logo_2020.svg/1200px-Facebook_Messenger_logo_2020.svg.png" alt="Messenger" style="width:1.2em;vertical-align:middle;"> Messenger
+      </a>
+    </div>
+  </section>
+</div>
+
+<style>
+.customer-intro-page {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f8fafc;
+  color: #222;
+  padding: 32px 0;
+}
+.intro-hero {
+  background: linear-gradient(90deg, #4f8cff 0%, #38c6ff 100%);
+  color: #fff;
+  padding: 40px 24px;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 32px;
+}
+.intro-hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+.intro-hero .lead {
+  font-size: 1.2rem;
+}
+.services {
+  margin-bottom: 32px;
+}
+.service-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+.service-item {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 24px;
+  width: 260px;
+  text-align: center;
+  position: relative;
+}
+.service-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+.service-item h3 {
+  color: #4f8cff;
+  margin-bottom: 8px;
+}
+.why-choose {
+  margin-bottom: 32px;
+}
+.why-choose ul {
+  list-style: disc inside;
+  padding-left: 0;
+}
+.why-choose li {
+  margin-bottom: 8px;
+}
+.contact {
+  background: #e3f2fd;
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+}
+.active-lang {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Contact action buttons */
+.contact-actions .contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  background: #fff;
+  border: 1px solid #b3c6e0;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 1em;
+  color: #1a237e;
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.contact-actions .contact-btn:hover {
+  background: #e3f2fd;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.contact-actions .call-btn { color: #388e3c; border-color: #388e3c; }
+.contact-actions .zalo-btn { color: #008fe5; border-color: #008fe5; }
+.contact-actions .whatsapp-btn { color: #25d366; border-color: #25d366; }
+.contact-actions .messenger-btn { color: #006aff; border-color: #006aff; }
+/* Commitments section */
+.commitments {
+  margin: 40px 0 32px 0;
+}
+.commitment-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+.commitment-item {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 24px 20px;
+  width: 320px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.commitment-icon {
+  font-family: 'FontAwesome', Arial, sans-serif;
+  font-size: 2.2em;
+  color: #4f8cff;
+  min-width: 2.2em;
+  text-align: center;
+  margin-top: 2px;
+}
+.commitment-item strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #1a237e;
+}
+.commitment-item p {
+  margin: 0;
+  color: #444;
+  font-size: 1em;
+}
+</style>

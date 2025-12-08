@@ -1,7 +1,7 @@
 
 class CustomersController < ApplicationController
   include Pagy::Backend
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:intro]
   before_action :set_customer, only: [:show, :edit, :update]
 
   def index
@@ -28,6 +28,11 @@ class CustomersController < ApplicationController
     else
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  # Trang giới thiệu sản phẩm/dịch vụ cho khách hàng
+  def intro
+    # Có thể truyền dữ liệu sản phẩm/dịch vụ ở đây nếu cần
   end
 
   private
