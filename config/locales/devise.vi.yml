@@ -1,0 +1,80 @@
+vi:
+  devise:
+    sessions:
+      signed_in: 'Đăng nhập thành công.'
+      signed_out: 'Đăng xuất thành công.'
+      new:
+        sign_in: 'Đăng nhập'
+        email: 'Email'
+        password: 'Mật khẩu'
+        remember_me: 'Ghi nhớ đăng nhập'
+        forgot_your_password: 'Quên mật khẩu?'
+    passwords:
+      new:
+        title: 'Quên mật khẩu'
+        email: 'Email'
+        send_instructions: 'Gửi hướng dẫn đặt lại mật khẩu'
+      edit:
+        title: 'Đặt lại mật khẩu'
+        password: 'Mật khẩu mới'
+        password_confirmation: 'Xác nhận mật khẩu'
+        change_my_password: 'Đổi mật khẩu'
+    registrations:
+      new:
+        sign_up: 'Đăng ký'
+        email: 'Email'
+        password: 'Mật khẩu'
+        password_confirmation: 'Xác nhận mật khẩu'
+      edit:
+        title: 'Chỉnh sửa tài khoản'
+        email: 'Email'
+        password: 'Mật khẩu mới'
+        password_confirmation: 'Xác nhận mật khẩu'
+        current_password: 'Mật khẩu hiện tại'
+        update: 'Cập nhật'
+        cancel: 'Hủy tài khoản'
+vi:
+  devise:
+    failure:
+      already_authenticated: "Bạn đã đăng nhập rồi."
+      inactive: "Tài khoản của bạn chưa được kích hoạt."
+      invalid: "Email hoặc mật khẩu không hợp lệ."
+      locked: "Tài khoản của bạn đã bị khóa."
+      last_attempt: "Bạn chỉ còn một lần thử trước khi tài khoản bị khóa."
+      not_found_in_database: "Email hoặc mật khẩu không hợp lệ."
+      timeout: "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại."
+      unauthenticated: "Bạn cần đăng nhập hoặc đăng ký trước khi tiếp tục."
+      unconfirmed: "Bạn cần xác nhận email trước khi tiếp tục."
+    sessions:
+      signed_in: 'Đăng nhập thành công.'
+      signed_out: 'Đăng xuất thành công.'
+      new:
+        sign_in: 'Đăng nhập'
+        email: 'Email'
+        password: 'Mật khẩu'
+        remember_me: 'Ghi nhớ đăng nhập'
+        forgot_your_password: 'Quên mật khẩu?'
+    passwords:
+      new:
+        title: 'Quên mật khẩu'
+        email: 'Email'
+        send_instructions: 'Gửi hướng dẫn đặt lại mật khẩu'
+      edit:
+        title: 'Đặt lại mật khẩu'
+        password: 'Mật khẩu mới'
+        password_confirmation: 'Xác nhận mật khẩu'
+        change_my_password: 'Đổi mật khẩu'
+    registrations:
+      new:
+        sign_up: 'Đăng ký'
+        email: 'Email'
+        password: 'Mật khẩu'
+        password_confirmation: 'Xác nhận mật khẩu'
+      edit:
+        title: 'Chỉnh sửa tài khoản'
+        email: 'Email'
+        password: 'Mật khẩu mới'
+        password_confirmation: 'Xác nhận mật khẩu'
+        current_password: 'Mật khẩu hiện tại'
+        update: 'Cập nhật'
+        cancel: 'Hủy tài khoản'
