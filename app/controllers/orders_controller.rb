@@ -198,6 +198,6 @@ class OrdersController < ApplicationController
   end
 
   def order_params
-    params.require(:order).permit(:customer_name, :customer_phone, :laundry_type, :separate_whites, :weight, :total_amount, :shipping_fee, :extra_fee)
+    params.require(:order).permit(:customer_name, :customer_phone, :laundry_type, :separate_whites, :weight, :total_amount, :shipping_fee, :extra_fee, :payment_method)
   end
 end

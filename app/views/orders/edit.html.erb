@@ -82,6 +82,23 @@
               </div>
             <% end %>
 
+            <% if @order.payment_completed? %>
+              <!-- Payment Method -->
+              <div class="row mb-4">
+                <div class="col-12">
+                  <h5 class="border-bottom pb-2 mb-3">
+                    <i class="fas fa-money-bill-wave me-2"></i>Phương thức thanh toán
+                  </h5>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <%= form.label :payment_method, "Phương thức", class: "form-label" %>
+                  <%= form.select :payment_method, options_for_select(Order::PAYMENT_METHODS.map { |t| [t[0], t[1]] }, @order.payment_method), { }, { class: 'form-select' } %>
+                  <small class="text-muted">Chọn "Tiền mặt" hoặc "Chuyển khoản" để cập nhật phương thức thanh toán.</small>
+                </div>
+              </div>
+            <% end %>
+
             <!-- Actions -->
             <div class="d-flex justify-content-between">
               <%= link_to @order, class: "btn btn-secondary" do %>
