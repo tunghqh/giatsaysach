@@ -106,6 +106,7 @@
               <th>Tổng tiền</th>
               <th>Điểm đã trừ</th>
               <th>Ngày tạo</th>
+              <th>Ngày thanh toán</th>
               <th>Thao tác</th>
             </tr>
           </thead>
@@ -163,6 +164,13 @@
                   <% end %>
                 </td>
                 <td><%= order.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+                <td>
+                  <% if order.paid_at.present? %>
+                    <%= order.paid_at.strftime("%d/%m/%Y %H:%M") %>
+                  <% else %>
+                    -
+                  <% end %>
+                </td>
                 <td>
                   <div class="btn-group-sm" role="group">
                     <%= link_to order_path(order), class: "btn btn-sm btn-outline-primary" do %>
