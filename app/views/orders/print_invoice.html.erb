@@ -191,7 +191,7 @@
 
       <div class="service-row">
         <span>Phụ thu:</span>
-        <span><%= number_to_currency((@order.extra_fee).to_i, unit: "đ", delimiter: ".", precision: 0, format: "%n%u") %><%= (@order.separate_whites && @order.extra_fee > 0) ? " (Giặt riêng)" : "" %></span>
+        <span><%= number_to_currency((@order.extra_fee).to_i, unit: "đ", delimiter: ".", precision: 0, format: "%n%u") %><%= (@order.separate_whites && @order.extra_fee > 0) ? " (GR Đồ trắng)" : "" %></span>
       </div>
     </div>
 
