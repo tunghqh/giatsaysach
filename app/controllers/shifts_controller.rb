@@ -1,5 +1,6 @@
 class ShiftsController < ApplicationController
   before_action :authenticate_user!
+  skip_before_action :require_open_shift_for_staff
   before_action :set_shift, only: [:edit, :update]
 
   # Staff screen: list recent shifts and start new one
