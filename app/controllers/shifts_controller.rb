@@ -5,7 +5,7 @@ class ShiftsController < ApplicationController
 
   # Staff screen: list recent shifts and start new one
   def index
-    @staff_names = ['Lâm', 'Vy', 'Tâm', 'Trang', 'Diễm']
+    @staff_names = ['Lâm', 'Vy', 'Tâm', 'Trang', 'Diễm', 'Hân']
     @selected_staff = params[:staff_name] || @staff_names.first
     @shifts = Shift.for_staff(@selected_staff).order(created_at: :desc).limit(20)
     @shift = Shift.new(staff_name: @selected_staff)
@@ -22,7 +22,7 @@ class ShiftsController < ApplicationController
     if @shift.save
       redirect_to shifts_path(staff_name: @shift.staff_name), notice: 'Đã bắt đầu ca.'
     else
-      @staff_names = ['Lâm', 'Vy', 'Dũng', 'Tâm', 'Diễm']
+      @staff_names = ['Lâm', 'Vy', 'Tâm', 'Trang', 'Diễm', 'Hân']
       @selected_staff = params[:staff_name] || @staff_names.first
       @shifts = Shift.for_staff(@selected_staff).order(created_at: :desc).limit(20)
       @shift = Shift.new(staff_name: @selected_staff)
