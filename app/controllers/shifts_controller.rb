@@ -1,7 +1,7 @@
 class ShiftsController < ApplicationController
   before_action :authenticate_user!
   skip_before_action :require_open_shift_for_staff
-  before_action :set_shift, only: [:edit, :update]
+  before_action :set_shift, only: [:edit, :update, :save_diff_reason]
 
   # Staff screen: list recent shifts and start new one
   def index
@@ -46,14 +46,39 @@ class ShiftsController < ApplicationController
       diff = end_cash - expected
       # if absolute difference > 10_000 VND, show modal in index view via flash
       if diff.abs > 10_000
-        flash[:show_shift_diff] = true
-        flash[:shift_diff_amount] = diff
-        flash[:shift_expected] = expected
-        flash[:shift_end_cash] = end_cash
+        set_shift_diff_flash(@shift, diff, expected, end_cash)
       end
       redirect_to shifts_path(staff_name: @shift.staff_name), notice: 'Đã kết ca.'
     else
       render :edit
+    end
+  end
+
+  def save_diff_reason
+    unless current_user.admin? || @shift.user_id == current_user.id
+      redirect_to shifts_path(staff_name: @shift.staff_name), alert: 'Bạn không có quyền cập nhật lý do cho ca này.'
+      return
+    end
+
+    reason = params.dig(:shift, :diff_reason).to_s.strip
+
+    if reason.blank?
+      expected = (@shift.start_cash || 0).to_i + (@shift.total_paid || 0).to_i
+      end_cash = (@shift.end_cash || 0).to_i
+      diff = end_cash - expected
+      set_shift_diff_flash(@shift, diff, expected, end_cash)
+      redirect_to shifts_path(staff_name: @shift.staff_name), alert: 'Vui lòng nhập lý do chênh lệch trước khi gửi.'
+      return
+    end
+
+    if @shift.update(diff_reason: reason)
+      redirect_to shifts_path(staff_name: @shift.staff_name), notice: 'Đã lưu lý do chênh lệch.'
+    else
+      expected = (@shift.start_cash || 0).to_i + (@shift.total_paid || 0).to_i
+      end_cash = (@shift.end_cash || 0).to_i
+      diff = end_cash - expected
+      set_shift_diff_flash(@shift, diff, expected, end_cash)
+      redirect_to shifts_path(staff_name: @shift.staff_name), alert: @shift.errors.full_messages.to_sentence
     end
   end
 
@@ -65,5 +90,13 @@ class ShiftsController < ApplicationController
 
   def shift_params
     params.require(:shift).permit(:user_id, :start_cash, :end_cash, :staff_name)
+  end
+
+  def set_shift_diff_flash(shift, diff, expected, end_cash)
+    flash[:show_shift_diff] = true
+    flash[:shift_id] = shift.id
+    flash[:shift_diff_amount] = diff
+    flash[:shift_expected] = expected
+    flash[:shift_end_cash] = end_cash
   end
 end

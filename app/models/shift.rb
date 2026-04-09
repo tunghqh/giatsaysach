@@ -4,6 +4,7 @@ class Shift < ApplicationRecord
   validates :start_cash, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   validates :staff_name, presence: true
+  validates :diff_reason, length: { maximum: 500 }, allow_blank: true
 
   scope :for_staff, ->(name) { where(staff_name: name) }
 

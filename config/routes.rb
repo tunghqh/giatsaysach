@@ -21,7 +21,11 @@ Rails.application.routes.draw do
   end
 
   # Shift management for staff
-  resources :shifts, only: [:index, :create, :edit, :update]
+  resources :shifts, only: [:index, :create, :edit, :update] do
+    member do
+      patch :save_diff_reason
+    end
+  end
 
   # AJAX routes
   get 'search_customer', to: 'orders#search_customer'
