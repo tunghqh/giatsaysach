@@ -22,6 +22,10 @@ Rails.application.routes.draw do
 
   # Shift management for staff
   resources :shifts, only: [:index, :create, :edit, :update] do
+    collection do
+      delete :delete_previous_month
+    end
+
     member do
       patch :save_diff_reason
     end

@@ -2,12 +2,13 @@ class ShiftsController < ApplicationController
   before_action :authenticate_user!
   skip_before_action :require_open_shift_for_staff
   before_action :set_shift, only: [:edit, :update, :save_diff_reason]
+  before_action :require_admin, only: [:delete_previous_month]
 
   # Staff screen: list recent shifts and start new one
   def index
     @staff_names = ['Lâm', 'Vy', 'Tâm', 'Trang', 'Diễm', 'Hân']
     @selected_staff = params[:staff_name] || @staff_names.first
-    @shifts = Shift.for_staff(@selected_staff).order(created_at: :desc).limit(20)
+    @shifts = Shift.for_staff(@selected_staff).order(created_at: :desc)
     @shift = Shift.new(staff_name: @selected_staff)
     @open_shift = Shift.for_staff(@selected_staff).where(end_time: nil).order(created_at: :desc).first
   end
@@ -24,7 +25,7 @@ class ShiftsController < ApplicationController
     else
       @staff_names = ['Lâm', 'Vy', 'Tâm', 'Trang', 'Diễm', 'Hân']
       @selected_staff = params[:staff_name] || @staff_names.first
-      @shifts = Shift.for_staff(@selected_staff).order(created_at: :desc).limit(20)
+      @shifts = Shift.for_staff(@selected_staff).order(created_at: :desc)
       @shift = Shift.new(staff_name: @selected_staff)
       render :index
     end
@@ -82,7 +83,21 @@ class ShiftsController < ApplicationController
     end
   end
 
+  def delete_previous_month
+    previous_month = Time.zone.today.prev_month
+    previous_month_range = previous_month.beginning_of_month.beginning_of_day..previous_month.end_of_month.end_of_day
+    deleted_count = Shift.where(created_at: previous_month_range).delete_all
+
+    redirect_to shifts_path(staff_name: params[:staff_name]), notice: "Đã xóa #{deleted_count} ca của tháng trước."
+  end
+
   private
+
+  def require_admin
+    return if current_user.admin?
+
+    redirect_to shifts_path(staff_name: params[:staff_name]), alert: 'Bạn không có quyền xóa dữ liệu ca.'
+  end
 
   def set_shift
     @shift = Shift.find(params[:id])
