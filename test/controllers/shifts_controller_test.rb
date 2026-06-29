@@ -41,7 +41,7 @@ class ShiftsControllerTest < ActionDispatch::IntegrationTest
   def create_shift(created_at:)
     Shift.create!(
       user: @admin,
-      staff_name: "Lâm",
+      staff_name: "Tâm",
       start_time: created_at,
       end_time: created_at + 8.hours,
       start_cash: 0,
