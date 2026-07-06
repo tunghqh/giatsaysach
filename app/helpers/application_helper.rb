@@ -87,7 +87,7 @@ module ApplicationHelper
     when 'wet_dry'
       '8.000đ'
     when 'spa_towel'
-      '11.000đ'
+      '12.000đ'
     when 'vest'
       '60.000đ'
     when 'shoes', 'bleach_clothes'
