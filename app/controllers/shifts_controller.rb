@@ -46,7 +46,7 @@ class ShiftsController < ApplicationController
       end_cash = (@shift.end_cash || 0).to_i
       diff = end_cash - expected
       # if absolute difference > 10_000 VND, show modal in index view via flash
-      if diff.abs > 10_000
+      if diff.abs > 5_000
         set_shift_diff_flash(@shift, diff, expected, end_cash)
       end
       redirect_to shifts_path(staff_name: @shift.staff_name), notice: 'Đã kết ca.'
