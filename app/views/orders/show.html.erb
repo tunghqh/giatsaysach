@@ -276,6 +276,12 @@
                   <%= link_to print_invoice_order_path(@order), class: "btn btn-success", target: "_blank" do %>
                     <i class="fas fa-print me-2"></i>In hóa đơn
                   <% end %>
+                  <% if current_user.admin? %>
+                    <%= button_to 'Chuyển về chưa thanh toán', reverse_payment_order_path(@order),
+                        method: :patch,
+                        class: 'btn btn-outline-danger w-100',
+                        form: { data: { turbo_confirm: 'Chuyển đơn này về chưa thanh toán? Điểm đã đổi sẽ được hoàn lại cho khách hàng.' } } %>
+                  <% end %>
                   <div class="alert alert-primary mb-0 mt-2">
                     <i class="fas fa-check-circle me-2"></i>Đã thanh toán
                   </div>

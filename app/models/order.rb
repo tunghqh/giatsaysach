@@ -95,7 +95,7 @@ class Order < ApplicationRecord
 
   # Chỉ cộng điểm khi đơn hàng chuyển sang trạng thái 'completed' (và trước đó chưa phải 'completed')
   def add_points_to_customer_if_completed
-    return unless saved_change_to_status? && completed? && status_before_last_save != 'completed' && customer.present?
+    return unless saved_change_to_status? && completed? && !%w[completed paid].include?(status_before_last_save) && customer.present?
 
     # Tính điểm cơ bản: 1% giá trị đơn hàng
     base_points = ((total_amount + extra_fee) * 0.01).to_i
@@ -106,6 +106,23 @@ class Order < ApplicationRecord
     end
 
     customer.increment!(:points, base_points)
+  end
+
+  # Lock the order so repeated requests cannot refund redeemed points twice.
+  def reverse_payment!
+    with_lock do
+      return false unless paid? && payment_completed?
+
+      customer.increment!(:points, redeemed_points) if redeemed_points.positive?
+      update!(
+        status: :completed,
+        payment_status: :payment_pending,
+        payment_method: nil,
+        paid_at: nil,
+        redeemed_points: 0
+      )
+    end
+    true
   end
 
   # Calculate subtotal (before fees)
@@ -129,7 +146,7 @@ class Order < ApplicationRecord
       when 'washing'
         self.started_washing_at = Time.current
       when 'completed'
-        self.completed_washing_at = Time.current
+        self.completed_washing_at = Time.current unless status_was == 'paid'
       when 'paid'
         self.paid_at = Time.current
       end

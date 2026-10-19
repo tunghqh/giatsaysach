@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     member do
       patch :start_washing
       patch :complete_washing
+      patch :reverse_payment
       patch :make_payment
       get :print_invoice
     end

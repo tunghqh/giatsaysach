@@ -2,8 +2,8 @@ class OrdersController < ApplicationController
   include Pagy::Backend
   include QrHelper
   before_action :authenticate_user!
-  before_action :set_order, only: [:show, :edit, :update, :destroy, :start_washing, :complete_washing, :make_payment, :print_invoice]
-  before_action :check_admin_permission, only: [:edit, :update, :destroy]
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :start_washing, :complete_washing, :make_payment, :reverse_payment, :print_invoice]
+  before_action :check_admin_permission, only: [:edit, :update, :destroy, :reverse_payment]
 
   def index
     orders = Order.includes(:customer).recent
@@ -152,6 +152,16 @@ class OrdersController < ApplicationController
     end
   end
 
+  def reverse_payment
+    if @order.reverse_payment!
+      redirect_to @order, notice: 'Đã chuyển đơn hàng về chưa thanh toán.'
+    else
+      redirect_to @order, alert: 'Chỉ có thể chuyển đơn đã thanh toán về chưa thanh toán.'
+    end
+  rescue ActiveRecord::RecordInvalid
+    redirect_to @order, alert: 'Không thể chuyển đơn về chưa thanh toán. Vui lòng kiểm tra lại thông tin đơn hàng.'
+  end
+
   def phone_search
   end
 
@@ -193,7 +203,7 @@ class OrdersController < ApplicationController
 
   def check_admin_permission
     unless current_user.admin?
-      redirect_to orders_path, alert: 'Bạn không có quyền thực hiện hành động này. Chỉ quản lý mới có thể chỉnh sửa/xóa đơn hàng.'
+      redirect_to orders_path, alert: 'Bạn không có quyền thực hiện hành động này. Chỉ quản lý mới có thể chỉnh sửa, xóa hoặc chuyển đơn về chưa thanh toán.'
     end
   end
 

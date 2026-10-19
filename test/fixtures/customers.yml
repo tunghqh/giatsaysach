@@ -2,8 +2,8 @@
 
 one:
   name: MyString
-  phone: MyString
+  phone: "0901234567"
 
 two:
   name: MyString
-  phone: MyString
+  phone: "0901234568"
