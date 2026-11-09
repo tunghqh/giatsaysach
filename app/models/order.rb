@@ -1,3 +1,5 @@
+require 'csv'
+
 class Order < ApplicationRecord
   after_update :add_points_to_customer_if_completed
   belongs_to :customer
@@ -91,6 +93,61 @@ class Order < ApplicationRecord
   # Calculate final total amount including fees
   def final_total_amount
     (total_amount || 0) + (shipping_fee || 0) + (extra_fee || 0)
+  end
+
+  def self.to_csv(orders)
+    headers = [
+      'Mã đơn hàng',
+      'Khách hàng',
+      'Số điện thoại',
+      'Loại giặt',
+      'Giặt đồ trắng riêng',
+      'Trạng thái',
+      'Trạng thái thanh toán',
+      'Phương thức thanh toán',
+      'Cân nặng (kg)',
+      'Tiền giặt (VNĐ)',
+      'Phí ship (VNĐ)',
+      'Phụ thu (VNĐ)',
+      'Tổng tiền (VNĐ)',
+      'Điểm đã trừ',
+      'Thực thu (VNĐ)',
+      'Ngày tạo đơn',
+      'Ngày hoàn thành giặt',
+      'Ngày thanh toán'
+    ]
+
+    csv_string = CSV.generate(headers: true) do |csv|
+      csv << headers
+      orders.each do |order|
+        final_amount = order.final_total_amount.to_i
+        redeemed = order.redeemed_points.to_i
+        actual_paid = [final_amount - redeemed, 0].max
+
+        csv << [
+          order.id,
+          order.customer_name,
+          order.customer_phone,
+          order.laundry_type_text,
+          order.separate_whites? ? 'Có' : 'Không',
+          order.status_text,
+          order.payment_completed? ? 'Đã thanh toán' : 'Chưa thanh toán',
+          order.payment_method_text,
+          order.weight,
+          order.total_amount&.to_i || 0,
+          order.shipping_fee&.to_i || 0,
+          order.extra_fee&.to_i || 0,
+          final_amount,
+          redeemed,
+          actual_paid,
+          order.created_at&.strftime('%d/%m/%Y %H:%M'),
+          order.completed_washing_at&.strftime('%d/%m/%Y %H:%M'),
+          order.paid_at&.strftime('%d/%m/%Y %H:%M')
+        ]
+      end
+    end
+
+    "\uFEFF" + csv_string
   end
 
   # Chỉ cộng điểm khi đơn hàng chuyển sang trạng thái 'completed' (và trước đó chưa phải 'completed')

@@ -40,6 +40,7 @@ Rails.application.routes.draw do
 
     # Admin statistics
     get 'statistics', to: 'statistics#index', as: :statistics
+    get 'statistics/export_orders', to: 'statistics#export_orders', as: :export_orders_statistics
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

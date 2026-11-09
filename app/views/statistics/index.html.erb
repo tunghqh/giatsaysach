@@ -11,8 +11,13 @@
           <%= form.label :to_date, "Đến ngày" %>
           <%= form.date_field :to_date, value: params[:to_date] || @to_date, class: "form-control" %>
         </div>
-        <div class="col-md-4 d-flex align-items-end">
-          <%= form.submit "Xem thống kê", class: "btn btn-primary w-100" %>
+        <div class="col-md-4 d-flex align-items-end gap-2">
+          <%= form.submit "Xem thống kê", class: "btn btn-primary flex-fill" %>
+          <% if current_user.admin? %>
+            <button type="submit" formaction="<%= export_orders_statistics_path %>" data-turbo="false" class="btn btn-success flex-fill">
+              <i class="fas fa-download me-1"></i>Tải xuống CSV
+            </button>
+          <% end %>
         </div>
       <% end %>
     </div>
